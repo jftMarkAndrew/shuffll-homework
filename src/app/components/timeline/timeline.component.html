@@ -1,0 +1,41 @@
+<div class="button">
+  <button class="play" (click)="togglePlay()">
+    <p class="play-text">Play</p>
+    <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
+  </button>
+</div>
+<div class="timeline">
+  <div class="timeline-cursor-top"></div>
+  <div class="timeline-cursor-line"></div>
+  <div class="timeline-top">
+    <ng-container *ngFor="let i of range(31)">
+      <div class="timeline-legend">
+        <p>{{ i }}</p>
+      </div>
+    </ng-container>
+  </div>
+  <div class="timeline-bottom">
+    <div class="timeline-content">
+      <div
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        class="timeline-content-horizontal"
+        [cdkDropListData]="scenesUsed"
+        (cdkDropListDropped)="onDrop($event)"
+        id="timeline"
+      >
+        <div class="no-scene-placeholder" *ngIf="scenesUsed.length === 0">
+          <p>Drop a Scene & Start Editing!</p>
+        </div>
+        <div class="scene" *ngFor="let scene of scenesUsed" cdkDrag>
+          <div>
+            <div class="scene-placeholder" *cdkDragPlaceholder></div>
+            <p class="text-title">{{ scene.title }}</p>
+            <p class="text-duration">Duration: {{ scene.duration }}s</p>
+          </div>
+          <mat-icon (click)="onDeleteScene(scene)">delete</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
