@@ -1,9 +1,10 @@
 .flex {
   display: flex;
+  justify-content: space-between;
   margin: 24px;
-  gap: 54px;
+  gap: 24px;
 }
 
-.elem {
-  width: 100%;
+.flex-grow {
+  flex-grow: 1;
 }
