@@ -1,5 +1,5 @@
 <div class="button">
-  <button class="play" (click)="togglePlay()">
+  <button class="play" (click)="togglePlay()" [disabled]="!isNull">
     <p class="play-text">Play</p>
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
   </button>

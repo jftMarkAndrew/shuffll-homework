@@ -23,6 +23,7 @@ export class TimelineComponent {
   scenesTimeline: Scene[] = [];
 
   isPlaying = false;
+  isNull = true;
 
   togglePlay() {
     this.isPlaying = !this.isPlaying;
@@ -30,7 +31,7 @@ export class TimelineComponent {
       if (this.scenesTimeline.length > 0) {
         this.videoService.playPreview(this.scenesTimeline);
       } else {
-        console.log('Nothing should happen!');
+        this.videoService.pausePreview();
       }
     }
   }

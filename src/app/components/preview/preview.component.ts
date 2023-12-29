@@ -32,12 +32,13 @@ export class PreviewComponent {
     if (this.isPlaying) {
       this.playVideosInOrder();
     } else {
-      this.stopPlayback();
+      this.pausePreview();
     }
   }
 
-  playPreview(scenesTimeline: Scene[]): void {
+  playPreview(scenesTimeline: Scene[], time?: number): void {
     this.scenesTimeline = scenesTimeline;
+    this.playVideosInOrder();
   }
 
   playVideosInOrder(): void {
@@ -51,14 +52,14 @@ export class PreviewComponent {
         currentIndex++;
         setTimeout(() => playNextVideo(), this.currentVideo.duration * 1000);
       } else {
-        this.stopPlayback();
+        this.pausePreview();
       }
     };
 
     playNextVideo();
   }
 
-  stopPlayback(): void {
+  pausePreview(): void {
     this.currentVideo = null;
     this.isPlaying = false;
     this.videoPlayer.nativeElement.pause();

@@ -4,18 +4,16 @@
   (cdkDropListDropped)="onDropScene($event)"
   id="scenes"
   cdkDropListSortingDisabled="true"
+  class="scenes-container"
 >
-  <div
-    class="scene"
-    (click)="togglePlay()"
-    *ngFor="let scene of scenes"
-    cdkDrag
-  >
+  <div class="scene" *ngFor="let scene of scenes" cdkDrag>
     <div>
       <div class="scene-placeholder" *cdkDragPlaceholder></div>
       <p class="text-title">{{ scene.title }}</p>
       <p class="text-duration">Duration: {{ scene.duration }}s</p>
     </div>
-    <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
+    <mat-icon (click)="togglePlay()">{{
+      isPlaying ? "pause" : "play_arrow"
+    }}</mat-icon>
   </div>
 </div>

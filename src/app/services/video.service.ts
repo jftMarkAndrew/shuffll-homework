@@ -19,6 +19,7 @@ export class VideoService {
   constructor() {}
 
   private previewComponent: PreviewComponent | null = null;
+
   registerPreviewComponent(previewComponent: PreviewComponent): void {
     this.previewComponent = previewComponent;
   }
@@ -48,8 +49,15 @@ export class VideoService {
     }
   }
 
-  public playPreview(scenesTimeline: Scene[]) {
-    if (this.previewComponent)
-      this.previewComponent.playPreview(scenesTimeline);
+  public playPreview(scenesTimeline: Scene[], time?: number) {
+    if (this.previewComponent) {
+      this.previewComponent.playPreview(scenesTimeline, time);
+    }
+  }
+
+  public pausePreview() {
+    if (this.previewComponent) {
+      this.previewComponent.pausePreview();
+    }
   }
 }
