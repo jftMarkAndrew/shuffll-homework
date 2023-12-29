@@ -42,22 +42,7 @@ export class SceneComponent {
     },
     {
       title: 'Finally the Awesome 3rd Scene!',
-      duration: 2,
-      url: 'assets/video/v3.mp4',
-    },
-    {
-      title: 'The Very 1st Scene.',
-      duration: 3,
-      url: 'assets/video/v1.mp4',
-    },
-    {
-      title: 'This is a Boring 2nd Scene...',
-      duration: 1,
-      url: 'assets/video/v2.mp4',
-    },
-    {
-      title: 'Finally the Awesome 3rd Scene!',
-      duration: 4,
+      duration: 5,
       url: 'assets/video/v3.mp4',
     },
   ];

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   CdkDragDrop,
+  copyArrayItem,
   moveItemInArray,
-  transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { PreviewComponent } from '../components/preview/preview.component';
 
@@ -29,7 +29,7 @@ export class VideoService {
       event.previousContainer.id === 'scenes' &&
       event.container.id === 'timeline'
     ) {
-      transferArrayItem(
+      copyArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
