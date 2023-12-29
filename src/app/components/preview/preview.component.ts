@@ -1,5 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { VideoService } from '../../services/video.service';
 import { MatIconModule } from '@angular/material/icon';
+
+interface Scene {
+  title: string;
+  duration: number;
+  url: string;
+}
 
 @Component({
   selector: 'app-preview',
@@ -9,9 +16,52 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './preview.component.scss',
 })
 export class PreviewComponent {
-  isPlaying = false;
+  constructor(private videoService: VideoService) {
+    this.videoService.registerPreviewComponent(this);
+  }
 
-  togglePlay() {
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef;
+
+  isPlaying = false;
+  scenesTimeline: Scene[] = [];
+  currentVideo: Scene | null = null;
+
+  togglePlay(): void {
     this.isPlaying = !this.isPlaying;
+
+    if (this.isPlaying) {
+      this.playVideosInOrder();
+    } else {
+      this.stopPlayback();
+    }
+  }
+
+  playPreview(scenesTimeline: Scene[]): void {
+    this.scenesTimeline = scenesTimeline;
+  }
+
+  playVideosInOrder(): void {
+    let currentIndex = 0;
+
+    const playNextVideo = () => {
+      if (currentIndex < this.scenesTimeline.length) {
+        this.currentVideo = this.scenesTimeline[currentIndex];
+        this.videoPlayer.nativeElement.src = this.currentVideo.url;
+        this.videoPlayer.nativeElement.play();
+        currentIndex++;
+        setTimeout(() => playNextVideo(), this.currentVideo.duration * 1000);
+      } else {
+        this.stopPlayback();
+      }
+    };
+
+    playNextVideo();
+  }
+
+  stopPlayback(): void {
+    this.currentVideo = null;
+    this.isPlaying = false;
+    this.videoPlayer.nativeElement.pause();
+    this.videoPlayer.nativeElement.src = '';
   }
 }

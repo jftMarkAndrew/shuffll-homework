@@ -4,6 +4,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { PreviewComponent } from '../components/preview/preview.component';
 
 interface Scene {
   title: string;
@@ -16,6 +17,11 @@ interface Scene {
 })
 export class VideoService {
   constructor() {}
+
+  private previewComponent: PreviewComponent | null = null;
+  registerPreviewComponent(previewComponent: PreviewComponent): void {
+    this.previewComponent = previewComponent;
+  }
 
   public drop(event: CdkDragDrop<Scene[]>) {
     if (
@@ -40,5 +46,10 @@ export class VideoService {
         console.log('Timeline Container Data:', event.container.data);
       }
     }
+  }
+
+  public playPreview(scenesTimeline: Scene[]) {
+    if (this.previewComponent)
+      this.previewComponent.playPreview(scenesTimeline);
   }
 }

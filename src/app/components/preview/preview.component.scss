@@ -1,12 +1,14 @@
 .preview {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 56.25vh;
   background-color: #161616;
   border-radius: 6px;
+  height: 56.25vh;
 }
 
 .mat-icon {
+  position: absolute;
   transform: scale(6);
 }

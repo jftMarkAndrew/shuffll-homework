@@ -2,4 +2,8 @@
   <mat-icon>{{
     isPlaying ? "pause_circle_filled" : "play_circle_filled"
   }}</mat-icon>
+  <video #videoPlayer width="100%" height="auto" preload="auto">
+    <source [src]="currentVideo" type="video/mp4" />
+    Your browser does not support the video.
+  </video>
 </div>

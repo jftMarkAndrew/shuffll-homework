@@ -23,9 +23,6 @@ interface Scene {
 export class SceneComponent {
   constructor(private videoService: VideoService) {}
 
-  @Input() items: Scene[] | undefined;
-  @Input() title = 'Scene';
-  @Input() duration = 3;
   isPlaying = false;
 
   togglePlay() {
@@ -35,37 +32,37 @@ export class SceneComponent {
   scenes: Scene[] = [
     {
       title: 'The Very 1st Scene.',
-      duration: 5,
-      url: '../../../../src/assets/video/v1.mp4',
+      duration: 3,
+      url: 'assets/video/v1.mp4',
     },
     {
       title: 'This is a Boring 2nd Scene...',
-      duration: 5,
-      url: '../../../../src/assets/video/v2.mp4',
+      duration: 4,
+      url: 'assets/video/v2.mp4',
     },
     {
       title: 'Finally the Awesome 3rd Scene!',
-      duration: 5,
-      url: '../../../../src/assets/video/v3.mp4',
+      duration: 2,
+      url: 'assets/video/v3.mp4',
     },
     {
       title: 'The Very 1st Scene.',
-      duration: 5,
-      url: '../../../../src/assets/video/v1.mp4',
+      duration: 3,
+      url: 'assets/video/v1.mp4',
     },
     {
       title: 'This is a Boring 2nd Scene...',
-      duration: 5,
-      url: '../../../../src/assets/video/v2.mp4',
+      duration: 1,
+      url: 'assets/video/v2.mp4',
     },
     {
       title: 'Finally the Awesome 3rd Scene!',
-      duration: 5,
-      url: '../../../../src/assets/video/v3.mp4',
+      duration: 4,
+      url: 'assets/video/v3.mp4',
     },
   ];
 
-  onDrop(event: CdkDragDrop<Scene[]>) {
+  onDropScene(event: CdkDragDrop<Scene[]>) {
     this.videoService.drop(event);
   }
 

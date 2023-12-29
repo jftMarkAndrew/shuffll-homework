@@ -20,26 +20,37 @@ interface Scene {
 export class TimelineComponent {
   constructor(private videoService: VideoService) {}
 
-  scenesUsed: Scene[] = [];
+  scenesTimeline: Scene[] = [];
 
   isPlaying = false;
 
   togglePlay() {
     this.isPlaying = !this.isPlaying;
+    if (this.isPlaying === true) {
+      if (this.scenesTimeline.length > 0) {
+        this.videoService.playPreview(this.scenesTimeline);
+      } else {
+        console.log('Nothing should happen!');
+      }
+    }
   }
 
   range(n: number): number[] {
     return Array.from({ length: n }, (_, i) => i);
   }
 
-  onDrop(event: CdkDragDrop<Scene[]>) {
+  onDropScene(event: CdkDragDrop<Scene[]>) {
+    this.isPlaying = false;
     this.videoService.drop(event);
+    console.log('Timeline Container Data:', this.scenesTimeline);
   }
 
   onDeleteScene(scene: Scene): void {
-    const index = this.scenesUsed.indexOf(scene);
+    this.isPlaying = false;
+    const index = this.scenesTimeline.indexOf(scene);
     if (index !== -1) {
-      this.scenesUsed.splice(index, 1);
+      this.scenesTimeline.splice(index, 1);
+      console.log('Timeline Container Data:', this.scenesTimeline);
     }
   }
 }

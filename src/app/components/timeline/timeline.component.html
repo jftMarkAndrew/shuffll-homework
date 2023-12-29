@@ -20,14 +20,14 @@
         cdkDropList
         cdkDropListOrientation="horizontal"
         class="timeline-content-horizontal"
-        [cdkDropListData]="scenesUsed"
-        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListData]="scenesTimeline"
+        (cdkDropListDropped)="onDropScene($event)"
         id="timeline"
       >
-        <div class="no-scene-placeholder" *ngIf="scenesUsed.length === 0">
+        <div class="no-scene-placeholder" *ngIf="scenesTimeline.length === 0">
           <p>Drop a Scene & Start Editing!</p>
         </div>
-        <div class="scene" *ngFor="let scene of scenesUsed" cdkDrag>
+        <div class="scene" *ngFor="let scene of scenesTimeline" cdkDrag>
           <div>
             <div class="scene-placeholder" *cdkDragPlaceholder></div>
             <p class="text-title">{{ scene.title }}</p>
