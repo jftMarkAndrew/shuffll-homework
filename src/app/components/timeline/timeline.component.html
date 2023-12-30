@@ -17,7 +17,13 @@
     <ng-container
       *ngFor="let i of getSteps(1920 / stepSize); let index = index"
     >
-      <p class="timeline-legend" [style.left.px]="index * stepSize">
+      <p
+        class="timeline-legend"
+        [style.left.px]="14 + index * stepSize"
+        [style.padding-right.px]="stepSize / 3"
+        [style.padding-left.px]="stepSize / 3"
+        (click)="setCursorPosition(index)"
+      >
         {{ i }}
       </p>
     </ng-container>

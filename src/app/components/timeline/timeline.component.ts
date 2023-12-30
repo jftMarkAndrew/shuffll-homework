@@ -28,6 +28,9 @@ export class TimelineComponent implements OnDestroy {
   startCursorMovement() {
     this.subscription = interval(1000).subscribe(() => {
       this.cursorPosition += this.stepSize;
+      if (this.cursorPosition / this.stepSize >= 1600 / this.stepSize) {
+        this.stopCursorMovement();
+      }
     });
   }
 
@@ -35,6 +38,11 @@ export class TimelineComponent implements OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  setCursorPosition(index: number) {
+    this.cursorPosition = index * this.stepSize;
+    console.log(this.cursorPosition / this.stepSize);
   }
 
   constructor(
