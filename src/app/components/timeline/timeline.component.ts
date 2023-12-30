@@ -1,38 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VideoService } from '../../services/video.service';
+import { VideoService, Scene } from '../../services/video.service';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
-
-interface Scene {
-  title: string;
-  duration: number;
-  url: string;
-}
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
   imports: [CommonModule, DragDropModule, MatIconModule],
   templateUrl: './timeline.component.html',
-  styleUrl: './timeline.component.scss',
+  styleUrls: ['./timeline.component.scss'],
 })
-export class TimelineComponent {
-  constructor(private videoService: VideoService) {}
-
+export class TimelineComponent implements OnDestroy {
   scenesTimeline: Scene[] = [];
-
   isPlaying = false;
   isNull = true;
+  private subscription?: Subscription;
+
+  constructor(private videoService: VideoService) {
+    this.subscription = this.videoService.scenesTimeline$.subscribe(
+      (scenes) => {
+        this.scenesTimeline = scenes;
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   togglePlay() {
     this.isPlaying = !this.isPlaying;
-    if (this.isPlaying === true) {
-      if (this.scenesTimeline.length > 0) {
-        this.videoService.playPreview(this.scenesTimeline);
-      } else {
-        this.videoService.pausePreview();
-      }
+
+    if (this.isPlaying) {
+      this.videoService.playPreview(this.scenesTimeline);
+    } else {
+      this.videoService.pausePreview();
     }
   }
 
@@ -43,7 +49,6 @@ export class TimelineComponent {
   onDropScene(event: CdkDragDrop<Scene[]>) {
     this.isPlaying = false;
     this.videoService.drop(event);
-    console.log('Timeline Container Data:', this.scenesTimeline);
   }
 
   onDeleteScene(scene: Scene): void {
@@ -51,7 +56,6 @@ export class TimelineComponent {
     const index = this.scenesTimeline.indexOf(scene);
     if (index !== -1) {
       this.scenesTimeline.splice(index, 1);
-      console.log('Timeline Container Data:', this.scenesTimeline);
     }
   }
 }

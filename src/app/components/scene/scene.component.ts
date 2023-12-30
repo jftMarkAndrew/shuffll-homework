@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -6,27 +6,28 @@ import {
   CdkDragEnd,
   DragDropModule,
 } from '@angular/cdk/drag-drop';
-import { VideoService } from '../../services/video.service';
+import { VideoService, Scene } from '../../services/video.service';
 
-interface Scene {
-  title: string;
-  duration: number;
-  url: string;
-}
 @Component({
   selector: 'app-scene',
   standalone: true,
   imports: [MatIconModule, CommonModule, DragDropModule],
   templateUrl: './scene.component.html',
-  styleUrl: './scene.component.scss',
+  styleUrls: ['./scene.component.scss'],
 })
 export class SceneComponent {
   constructor(private videoService: VideoService) {}
 
   isPlaying = false;
 
-  togglePlay() {
+  togglePlay(scene: Scene): void {
     this.isPlaying = !this.isPlaying;
+
+    if (this.isPlaying) {
+      this.videoService.playPreview([scene]);
+    } else {
+      this.videoService.pausePreview();
+    }
   }
 
   scenes: Scene[] = [
@@ -47,11 +48,11 @@ export class SceneComponent {
     },
   ];
 
-  onDropScene(event: CdkDragDrop<Scene[]>) {
+  onDropScene(event: CdkDragDrop<Scene[]>): void {
     this.videoService.drop(event);
   }
 
-  onDragEnd(event: CdkDragEnd) {
+  onDragEnd(event: CdkDragEnd): void {
     event.source.data = null;
   }
 }

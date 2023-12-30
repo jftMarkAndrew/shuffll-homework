@@ -1,9 +1,6 @@
-<div class="preview" (click)="togglePlay()">
-  <mat-icon>{{
-    isPlaying ? "pause_circle_filled" : "play_circle_filled"
-  }}</mat-icon>
+<div class="preview">
   <video #videoPlayer width="960" height="540" preload="auto">
-    <source [src]="currentVideo" type="video/mp4" />
+    <source [src]="currentVideo?.url" type="video/mp4" />
     Your browser does not support the video.
   </video>
 </div>

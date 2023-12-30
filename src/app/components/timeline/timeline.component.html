@@ -8,10 +8,8 @@
   <div class="timeline-cursor-top"></div>
   <div class="timeline-cursor-line"></div>
   <div class="timeline-top">
-    <ng-container *ngFor="let i of range(31)">
-      <div class="timeline-legend">
-        <p>{{ i }}</p>
-      </div>
+    <ng-container *ngFor="let i of range(31); let index = index">
+      <p class="timeline-legend" [style.left.px]="index * 60">{{ i }}</p>
     </ng-container>
   </div>
   <div class="timeline-bottom">
@@ -27,9 +25,18 @@
         <div class="no-scene-placeholder" *ngIf="scenesTimeline.length === 0">
           <p>Drop a Scene & Start Editing!</p>
         </div>
-        <div class="scene" *ngFor="let scene of scenesTimeline" cdkDrag>
+        <div
+          class="scene"
+          [style.width.px]="60 * scene.duration - 3"
+          *ngFor="let scene of scenesTimeline"
+          cdkDrag
+        >
           <div>
-            <div class="scene-placeholder" *cdkDragPlaceholder></div>
+            <div
+              class="scene-placeholder"
+              [style.min-width.px]="60 * scene.duration - 3"
+              *cdkDragPlaceholder
+            ></div>
             <p class="text-title">{{ scene.title }}</p>
             <p class="text-duration">Duration: {{ scene.duration }}s</p>
           </div>

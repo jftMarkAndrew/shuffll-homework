@@ -8,11 +8,15 @@
 >
   <div class="scene" *ngFor="let scene of scenes" cdkDrag>
     <div>
-      <div class="scene-placeholder" *cdkDragPlaceholder></div>
+      <div
+        class="scene-placeholder"
+        [style.min-width.px]="60 * scene.duration - 3"
+        *cdkDragPlaceholder
+      ></div>
       <p class="text-title">{{ scene.title }}</p>
       <p class="text-duration">Duration: {{ scene.duration }}s</p>
     </div>
-    <mat-icon (click)="togglePlay()">{{
+    <mat-icon (click)="togglePlay(scene)">{{
       isPlaying ? "pause" : "play_arrow"
     }}</mat-icon>
   </div>

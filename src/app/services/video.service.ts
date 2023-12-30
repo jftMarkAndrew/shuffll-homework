@@ -4,9 +4,9 @@ import {
   copyArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { PreviewComponent } from '../components/preview/preview.component';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-interface Scene {
+export interface Scene {
   title: string;
   duration: number;
   url: string;
@@ -16,12 +16,16 @@ interface Scene {
   providedIn: 'root',
 })
 export class VideoService {
+  private scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
+  scenesTimeline$: Observable<Scene[]> =
+    this.scenesTimelineSubject.asObservable();
+
   constructor() {}
 
-  private previewComponent: PreviewComponent | null = null;
+  private videoPlayer: HTMLVideoElement | null = null;
 
-  registerPreviewComponent(previewComponent: PreviewComponent): void {
-    this.previewComponent = previewComponent;
+  setVideoPlayer(videoPlayer: HTMLVideoElement | null) {
+    this.videoPlayer = videoPlayer;
   }
 
   public drop(event: CdkDragDrop<Scene[]>) {
@@ -37,6 +41,7 @@ export class VideoService {
         event.currentIndex
       );
       console.log('Timeline Container Data:', event.container.data);
+      this.scenesTimelineSubject.next(event.container.data);
     } else {
       moveItemInArray(
         event.container.data,
@@ -45,19 +50,41 @@ export class VideoService {
       );
       if (event.container.id === 'timeline') {
         console.log('Timeline Container Data:', event.container.data);
+        this.scenesTimelineSubject.next(event.container.data);
       }
     }
   }
 
-  public playPreview(scenesTimeline: Scene[], time?: number) {
-    if (this.previewComponent) {
-      this.previewComponent.playPreview(scenesTimeline, time);
-    }
+  playPreview(scenesTimeline: Scene[]) {
+    console.log('Starting playing videos in this order:', scenesTimeline);
+
+    let currentIndex = 0;
+
+    const playNextVideo = () => {
+      if (currentIndex < scenesTimeline.length) {
+        const scene = scenesTimeline[currentIndex];
+        console.log(`Playing video ${scene.url}`);
+
+        this.videoPlayer?.setAttribute('src', scene.url);
+        this.videoPlayer?.load();
+        this.videoPlayer?.play();
+
+        currentIndex++;
+
+        if (currentIndex === scenesTimeline.length) {
+          setTimeout(() => this.pausePreview(), scene.duration * 1000);
+        } else {
+          setTimeout(playNextVideo, scene.duration * 1000);
+        }
+      } else {
+        this.pausePreview();
+      }
+    };
+
+    playNextVideo();
   }
 
   public pausePreview() {
-    if (this.previewComponent) {
-      this.previewComponent.pausePreview();
-    }
+    console.log('Pausing preview');
   }
 }

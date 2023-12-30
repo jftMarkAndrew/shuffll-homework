@@ -1,62 +1,38 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { VideoService } from '../../services/video.service';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { VideoService, Scene } from '../../services/video.service';
 import { MatIconModule } from '@angular/material/icon';
-
-interface Scene {
-  title: string;
-  duration: number;
-  url: string;
-}
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-preview',
   standalone: true,
   imports: [MatIconModule],
   templateUrl: './preview.component.html',
-  styleUrl: './preview.component.scss',
+  styleUrls: ['./preview.component.scss'],
 })
-export class PreviewComponent {
-  constructor(private videoService: VideoService) {
-    this.videoService.registerPreviewComponent(this);
-  }
-
-  @ViewChild('videoPlayer') videoPlayer!: ElementRef;
+export class PreviewComponent implements AfterViewInit {
+  @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef;
 
   isPlaying = false;
-  scenesTimeline: Scene[] = [];
+  scenesTimeline$: Observable<Scene[]> = this.videoService.scenesTimeline$;
   currentVideo: Scene | null = null;
+
+  constructor(private videoService: VideoService) {}
+
+  ngAfterViewInit() {
+    this.videoService.setVideoPlayer(this.videoPlayer.nativeElement);
+  }
 
   togglePlay(): void {
     this.isPlaying = !this.isPlaying;
 
     if (this.isPlaying) {
-      this.playVideosInOrder();
+      this.scenesTimeline$.subscribe((scenesTimeline) => {
+        this.videoService.playPreview(scenesTimeline);
+      });
     } else {
       this.pausePreview();
     }
-  }
-
-  playPreview(scenesTimeline: Scene[], time?: number): void {
-    this.scenesTimeline = scenesTimeline;
-    this.playVideosInOrder();
-  }
-
-  playVideosInOrder(): void {
-    let currentIndex = 0;
-
-    const playNextVideo = () => {
-      if (currentIndex < this.scenesTimeline.length) {
-        this.currentVideo = this.scenesTimeline[currentIndex];
-        this.videoPlayer.nativeElement.src = this.currentVideo.url;
-        this.videoPlayer.nativeElement.play();
-        currentIndex++;
-        setTimeout(() => playNextVideo(), this.currentVideo.duration * 1000);
-      } else {
-        this.pausePreview();
-      }
-    };
-
-    playNextVideo();
   }
 
   pausePreview(): void {
