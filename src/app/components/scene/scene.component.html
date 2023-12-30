@@ -1,12 +1,12 @@
 <div
   cdkDropList
-  [cdkDropListData]="scenes"
+  [cdkDropListData]="mockScenes"
   (cdkDropListDropped)="onDropScene($event)"
   id="scenes"
   cdkDropListSortingDisabled="true"
   class="scenes-container"
 >
-  <div class="scene" *ngFor="let scene of scenes" cdkDrag>
+  <div class="scene" *ngFor="let scene of mockScenes" cdkDrag>
     <div>
       <div
         class="scene-placeholder"
@@ -17,7 +17,7 @@
       <p class="text-duration">Duration: {{ scene.duration }}s</p>
     </div>
     <mat-icon (click)="togglePlay(scene)">{{
-      isPlaying ? "pause" : "play_arrow"
+      videoService.isScenePlaying(scene) ? "pause" : "play_arrow"
     }}</mat-icon>
   </div>
 </div>

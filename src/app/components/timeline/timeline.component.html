@@ -4,6 +4,12 @@
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
   </button>
 </div>
+<div class="button">
+  <button class="play" (click)="test()" [disabled]="!isNull">
+    <p class="play-text">Resume</p>
+    <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
+  </button>
+</div>
 <div class="timeline">
   <div class="timeline-cursor-top"></div>
   <div class="timeline-cursor-line"></div>

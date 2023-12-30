@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -16,37 +16,33 @@ import { VideoService, Scene } from '../../services/video.service';
   styleUrls: ['./scene.component.scss'],
 })
 export class SceneComponent {
-  constructor(private videoService: VideoService) {}
+  constructor(public videoService: VideoService) {}
 
-  isPlaying = false;
-
-  togglePlay(scene: Scene): void {
-    this.isPlaying = !this.isPlaying;
-
-    if (this.isPlaying) {
-      this.videoService.playPreview([scene]);
-    } else {
-      this.videoService.pausePreview();
-    }
-  }
-
-  scenes: Scene[] = [
+  mockScenes: Scene[] = [
     {
       title: 'The Very 1st Scene.',
-      duration: 3,
-      url: 'assets/video/v1.mp4',
+      duration: 4,
+      url: 'assets/video/mockVideo1.mp4',
     },
     {
       title: 'This is a Boring 2nd Scene...',
-      duration: 4,
-      url: 'assets/video/v2.mp4',
+      duration: 5,
+      url: 'assets/video/mockVideo2.mp4',
     },
     {
       title: 'Finally the Awesome 3rd Scene!',
-      duration: 5,
-      url: 'assets/video/v3.mp4',
+      duration: 3,
+      url: 'assets/video/mockVideo3.mp4',
     },
   ];
+
+  togglePlay(scene: Scene): void {
+    if (!this.videoService.isScenePlaying(scene)) {
+      this.videoService.playScene(scene);
+    } else {
+      this.videoService.pauseScene();
+    }
+  }
 
   onDropScene(event: CdkDragDrop<Scene[]>): void {
     this.videoService.drop(event);

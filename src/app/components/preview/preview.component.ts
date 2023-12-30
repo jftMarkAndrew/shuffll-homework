@@ -26,7 +26,7 @@ export class PreviewComponent implements AfterViewInit {
   togglePlay(): void {
     this.isPlaying = !this.isPlaying;
 
-    if (this.isPlaying) {
+    if (!this.isPlaying) {
       this.scenesTimeline$.subscribe((scenesTimeline) => {
         this.videoService.playPreview(scenesTimeline);
       });

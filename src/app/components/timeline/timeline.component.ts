@@ -42,6 +42,10 @@ export class TimelineComponent implements OnDestroy {
     }
   }
 
+  test() {
+    this.videoService.resumePreview();
+  }
+
   range(n: number): number[] {
     return Array.from({ length: n }, (_, i) => i);
   }
