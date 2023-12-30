@@ -1,21 +1,25 @@
 <div class="button">
-  <button class="play" (click)="togglePlay()" [disabled]="!isNull">
+  <button class="play" (click)="togglePlay()" [disabled]="false">
     <p class="play-text">Play</p>
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
   </button>
 </div>
 <div class="button">
-  <button class="play" (click)="test()" [disabled]="!isNull">
+  <button class="play" (click)="test()" [disabled]="false">
     <p class="play-text">Resume</p>
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
   </button>
 </div>
 <div class="timeline">
-  <div class="timeline-cursor-top"></div>
-  <div class="timeline-cursor-line"></div>
+  <div class="timeline-cursor-top" [style.left.px]="4 + cursorPosition"></div>
+  <div class="timeline-cursor-line" [style.left.px]="12 + cursorPosition"></div>
   <div class="timeline-top">
-    <ng-container *ngFor="let i of range(31); let index = index">
-      <p class="timeline-legend" [style.left.px]="index * 60">{{ i }}</p>
+    <ng-container
+      *ngFor="let i of getSteps(1920 / stepSize); let index = index"
+    >
+      <p class="timeline-legend" [style.left.px]="index * stepSize">
+        {{ i }}
+      </p>
     </ng-container>
   </div>
   <div class="timeline-bottom">
@@ -33,14 +37,14 @@
         </div>
         <div
           class="scene"
-          [style.width.px]="60 * scene.duration - 3"
+          [style.width.px]="stepSize * scene.duration - 3"
           *ngFor="let scene of scenesTimeline"
           cdkDrag
         >
           <div>
             <div
               class="scene-placeholder"
-              [style.min-width.px]="60 * scene.duration - 3"
+              [style.min-width.px]="stepSize * scene.duration - 3"
               *cdkDragPlaceholder
             ></div>
             <p class="text-title">{{ scene.title }}</p>

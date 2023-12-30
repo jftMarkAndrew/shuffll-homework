@@ -4,7 +4,7 @@ import { DndService, Scene } from '../../services/dnd.service';
 import { VideoService } from '../../services/video.service';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'app-timeline',
@@ -15,9 +15,27 @@ import { Subscription } from 'rxjs';
 })
 export class TimelineComponent implements OnDestroy {
   scenesTimeline: Scene[] = [];
-  isPlaying = false;
+  isPlaying: boolean = false;
+  cursorPosition: number = 0;
+  stepSize: number = 64;
   isNull = true;
   private subscription?: Subscription;
+
+  getSteps(n: number): number[] {
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  startCursorMovement() {
+    this.subscription = interval(1000).subscribe(() => {
+      this.cursorPosition += this.stepSize;
+    });
+  }
+
+  stopCursorMovement() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   constructor(
     private dndService: DndService,
@@ -40,18 +58,16 @@ export class TimelineComponent implements OnDestroy {
     this.isPlaying = !this.isPlaying;
 
     if (this.isPlaying) {
-      this.videoService.playPreview(this.scenesTimeline, 4);
+      this.videoService.playPreview(this.scenesTimeline, 0);
+      this.startCursorMovement();
     } else {
       this.videoService.pausePreview();
+      this.stopCursorMovement();
     }
   }
 
   test() {
     this.videoService.resumePreview();
-  }
-
-  range(n: number): number[] {
-    return Array.from({ length: n }, (_, i) => i);
   }
 
   onDropScene(event: CdkDragDrop<Scene[]>) {
