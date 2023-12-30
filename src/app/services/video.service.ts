@@ -1,16 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  CdkDragDrop,
-  copyArrayItem,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { Scene } from './dnd.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-export interface Scene {
-  title: string;
-  duration: number;
-  url: string;
-}
 
 @Injectable({
   providedIn: 'root',
@@ -22,33 +12,6 @@ export class VideoService {
     this.scenesTimelineSubject.asObservable();
   private videoPlayer: HTMLVideoElement | null = null;
   private currentScene: Scene | null = null;
-
-  public drop(event: CdkDragDrop<Scene[]>) {
-    if (
-      event.previousContainer !== event.container &&
-      event.previousContainer.id === 'scenes' &&
-      event.container.id === 'timeline'
-    ) {
-      copyArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-      console.log('Timeline Container Data:', event.container.data);
-      this.scenesTimelineSubject.next(event.container.data);
-    } else {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-      if (event.container.id === 'timeline') {
-        console.log('Timeline Container Data:', event.container.data);
-        this.scenesTimelineSubject.next(event.container.data);
-      }
-    }
-  }
 
   setVideoPlayer(videoPlayer: HTMLVideoElement | null) {
     this.videoPlayer = videoPlayer;
@@ -93,7 +56,15 @@ export class VideoService {
     console.log('Starting playing videos in this order:', scenesTimeline);
 
     let currentIndex = 0;
-    let resumeTime = startTime || 0;
+    let accumulatedTime = 0;
+
+    while (
+      currentIndex < scenesTimeline.length &&
+      accumulatedTime + scenesTimeline[currentIndex].duration <= startTime!
+    ) {
+      accumulatedTime += scenesTimeline[currentIndex].duration;
+      currentIndex++;
+    }
 
     const playNextVideo = async () => {
       if (currentIndex < scenesTimeline.length && this.continuePlaying) {
@@ -105,19 +76,26 @@ export class VideoService {
           this.videoPlayer.load();
 
           if (this.videoPlayer.currentTime !== undefined) {
-            this.videoPlayer.currentTime = resumeTime;
+            this.videoPlayer.currentTime = startTime
+              ? Math.max(0, startTime - accumulatedTime)
+              : 0;
           }
 
           this.videoPlayer.play();
 
           currentIndex++;
 
-          if (currentIndex === scenesTimeline.length) {
-            await this.delay(scene.duration * 1000 - resumeTime * 1000);
-            this.pausePreview();
-          } else {
-            await this.delay(scene.duration * 1000 - resumeTime * 1000);
+          if (currentIndex < scenesTimeline.length) {
+            await this.delay(scene.duration * 1000);
+            accumulatedTime += scene.duration;
             await playNextVideo();
+          } else {
+            await this.delay(
+              scene.duration * 1000 -
+                (startTime ? Math.max(0, startTime - accumulatedTime) : 0) *
+                  1000
+            );
+            this.pausePreview();
           }
         }
       } else {

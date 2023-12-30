@@ -6,7 +6,8 @@ import {
   CdkDragEnd,
   DragDropModule,
 } from '@angular/cdk/drag-drop';
-import { VideoService, Scene } from '../../services/video.service';
+import { DndService, Scene } from '../../services/dnd.service';
+import { VideoService } from '../../services/video.service';
 
 @Component({
   selector: 'app-scene',
@@ -16,7 +17,10 @@ import { VideoService, Scene } from '../../services/video.service';
   styleUrls: ['./scene.component.scss'],
 })
 export class SceneComponent {
-  constructor(public videoService: VideoService) {}
+  constructor(
+    private dndService: DndService,
+    public videoService: VideoService
+  ) {}
 
   mockScenes: Scene[] = [
     {
@@ -45,7 +49,7 @@ export class SceneComponent {
   }
 
   onDropScene(event: CdkDragDrop<Scene[]>): void {
-    this.videoService.drop(event);
+    this.dndService.drop(event);
   }
 
   onDragEnd(event: CdkDragEnd): void {

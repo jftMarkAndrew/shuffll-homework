@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { VideoService, Scene } from '../../services/video.service';
+import { Scene } from '../../services/dnd.service';
+import { VideoService } from '../../services/video.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 

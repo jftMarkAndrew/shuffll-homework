@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VideoService, Scene } from '../../services/video.service';
+import { DndService, Scene } from '../../services/dnd.service';
+import { VideoService } from '../../services/video.service';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
@@ -18,7 +19,10 @@ export class TimelineComponent implements OnDestroy {
   isNull = true;
   private subscription?: Subscription;
 
-  constructor(private videoService: VideoService) {
+  constructor(
+    private dndService: DndService,
+    private videoService: VideoService
+  ) {
     this.subscription = this.videoService.scenesTimeline$.subscribe(
       (scenes) => {
         this.scenesTimeline = scenes;
@@ -36,7 +40,7 @@ export class TimelineComponent implements OnDestroy {
     this.isPlaying = !this.isPlaying;
 
     if (this.isPlaying) {
-      this.videoService.playPreview(this.scenesTimeline);
+      this.videoService.playPreview(this.scenesTimeline, 4);
     } else {
       this.videoService.pausePreview();
     }
@@ -52,7 +56,7 @@ export class TimelineComponent implements OnDestroy {
 
   onDropScene(event: CdkDragDrop<Scene[]>) {
     this.isPlaying = false;
-    this.videoService.drop(event);
+    this.dndService.drop(event);
   }
 
   onDeleteScene(scene: Scene): void {
