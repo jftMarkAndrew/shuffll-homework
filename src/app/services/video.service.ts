@@ -117,12 +117,4 @@ export class VideoService {
       console.log('Pausing preview');
     }
   }
-
-  resumePreview() {
-    this.continuePlaying = true;
-    if (this.videoPlayer && this.videoPlayer.paused) {
-      this.videoPlayer.play();
-      console.log('Resuming preview');
-    }
-  }
 }

@@ -11,19 +11,13 @@
     <p class="play-text">{{ isPlaying ? "Pause" : "Play" }}</p>
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
   </button>
-  <button class="play" (click)="test()" [disabled]="false">
-    <p class="play-text">Resume</p>
-    <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
-  </button>
 </div>
 <div class="play-button"></div>
 <div class="timeline">
   <div class="timeline-cursor-top" [style.left.px]="4 + cursorPosition"></div>
   <div class="timeline-cursor-line" [style.left.px]="12 + cursorPosition"></div>
   <div class="timeline-top">
-    <ng-container
-      *ngFor="let i of getSteps(1920 / stepSize); let index = index"
-    >
+    <ng-container *ngFor="let i of getSteps(stepSize); let index = index">
       <p
         *ngIf="zoom >= -3 || index % 5 === 0"
         class="timeline-legend"

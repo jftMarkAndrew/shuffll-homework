@@ -14,6 +14,18 @@ import { Subscription, interval } from 'rxjs';
   styleUrls: ['./timeline.component.scss'],
 })
 export class TimelineComponent implements OnDestroy {
+  constructor(
+    private dndService: DndService,
+    private videoService: VideoService
+  ) {
+    this.subscription = this.videoService.scenesTimeline$.subscribe(
+      (scenes) => {
+        this.scenesTimeline = scenes;
+      }
+    );
+  }
+
+  arrayDuration: number = 0;
   scenesTimeline: Scene[] = [];
   isPlaying: boolean = false;
   cursorPosition: number = 0;
@@ -23,28 +35,14 @@ export class TimelineComponent implements OnDestroy {
   isNull = true;
   private subscription?: Subscription;
 
-  getSteps(number: number): number[] {
-    return Array.from({ length: number }, (_, i) => i);
-  }
-
-  startCursorMovement() {
-    this.subscription = interval(1000).subscribe(() => {
-      this.cursorPosition += this.stepSize;
-      if (this.cursorPosition / this.stepSize >= 1600 / this.stepSize) {
-        this.stopCursorMovement();
-      }
-    });
-  }
-
-  stopCursorMovement() {
+  ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
-  setCursorPosition(index: number) {
-    this.cursorPosition = index * this.stepSize;
-    console.log(this.cursorPosition / this.stepSize);
+  getSteps(number: number): number[] {
+    return Array.from({ length: 3840 / number }, (_, i) => i);
   }
 
   zoomIn() {
@@ -65,20 +63,35 @@ export class TimelineComponent implements OnDestroy {
     }
   }
 
-  constructor(
-    private dndService: DndService,
-    private videoService: VideoService
-  ) {
-    this.subscription = this.videoService.scenesTimeline$.subscribe(
-      (scenes) => {
-        this.scenesTimeline = scenes;
+  startCursorMovement() {
+    this.subscription = interval(100).subscribe(() => {
+      if (this.cursorPosition / this.stepSize >= this.arrayDuration) {
+        this.stopCursorMovement();
+      } else {
+        this.cursorPosition += this.stepSize / 10;
       }
-    );
+    });
   }
 
-  ngOnDestroy(): void {
+  stopCursorMovement() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  setCursorPosition(index: number) {
+    this.cursorPosition = index * this.stepSize;
+    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
+      this.cursorPosition = this.stepSize * this.arrayDuration;
+    }
+    console.log(this.cursorPosition / this.stepSize);
+  }
+
+  setArrayDuration(array: Scene[]) {
+    this.arrayDuration = 0;
+
+    for (const scene of array) {
+      this.arrayDuration += scene.duration;
     }
   }
 
@@ -97,13 +110,10 @@ export class TimelineComponent implements OnDestroy {
     }
   }
 
-  test() {
-    this.videoService.resumePreview();
-  }
-
   onDropScene(event: CdkDragDrop<Scene[]>) {
     this.isPlaying = false;
     this.dndService.drop(event);
+    this.setArrayDuration(this.scenesTimeline);
   }
 
   onDeleteScene(scene: Scene): void {
@@ -111,6 +121,10 @@ export class TimelineComponent implements OnDestroy {
     const index = this.scenesTimeline.indexOf(scene);
     if (index !== -1) {
       this.scenesTimeline.splice(index, 1);
+      this.setArrayDuration(this.scenesTimeline);
+    }
+    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
+      this.cursorPosition = this.stepSize * this.arrayDuration;
     }
   }
 }
