@@ -19,7 +19,10 @@ export class VideoService {
   }
 
   playScene(scene: Scene) {
-    this.pausePreview();
+    this.isPreviewPlaying = false;
+    if (this.videoPlayer) {
+      this.videoPlayer.pause();
+    }
 
     if (
       this.videoPlayer &&
@@ -50,6 +53,7 @@ export class VideoService {
   }
 
   isScenePlaying(scene: Scene): boolean {
+    if (this.isPreviewPlaying) return false;
     return this.currentScene === scene && !this.videoPlayer!.paused;
   }
 
@@ -95,8 +99,6 @@ export class VideoService {
             await this.delay(remainingTime * 1000);
             accumulatedTime += scene.duration;
             await playNextVideo();
-          } else {
-            this.pausePreview();
           }
         }
       } else {
