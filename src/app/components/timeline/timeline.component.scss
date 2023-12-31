@@ -37,15 +37,17 @@
   border-radius: 50%;
   background-color: none;
   border: 3px #f24822 solid;
+  z-index: 1;
 }
 
 .timeline-cursor-line {
   position: absolute;
   top: 24px;
   width: 3px;
-  height: 108px;
-  border-radius: 1px;
+  height: 96px;
+  border-radius: 1.5px;
   background-color: #f24822;
+  z-index: 1;
 }
 
 .timeline-bottom {
@@ -70,16 +72,46 @@
   gap: 3px;
 }
 
-.button {
+.flex-space-between {
   display: flex;
-  justify-content: right;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 54px 0 18px;
+}
+
+.flex {
+  display: flex;
+}
+
+.zoom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: #161616;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  .mat-icon {
+    transform: scale(1.5);
+  }
+}
+
+.zoom:hover {
+  background-color: #ffcd2950;
+}
+
+.zoom:active {
+  background-color: #ffcd29;
 }
 
 .play {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin: 0 54px;
   width: 120px;
   height: 48px;
   color: #e0e0e0;
@@ -87,6 +119,11 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+
+  .mat-icon {
+    padding: 0 8px;
+    transform: scale(0.75);
+  }
 }
 
 .play:hover {
@@ -112,6 +149,11 @@
   background-color: #e0e0e0;
   border-radius: 6px;
   cursor: pointer;
+
+  .mat-icon {
+    padding-right: 12px;
+    transform: scale(0.8);
+  }
 }
 
 .scene:hover {
@@ -154,9 +196,4 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 12px;
-}
-
-.mat-icon {
-  padding: 0 16px;
-  transform: scale(0.8);
 }

@@ -18,11 +18,13 @@ export class TimelineComponent implements OnDestroy {
   isPlaying: boolean = false;
   cursorPosition: number = 0;
   stepSize: number = 64;
+  zoomFactor: number = 1.25;
+  zoom: number = 0;
   isNull = true;
   private subscription?: Subscription;
 
-  getSteps(n: number): number[] {
-    return Array.from({ length: n }, (_, i) => i);
+  getSteps(number: number): number[] {
+    return Array.from({ length: number }, (_, i) => i);
   }
 
   startCursorMovement() {
@@ -43,6 +45,24 @@ export class TimelineComponent implements OnDestroy {
   setCursorPosition(index: number) {
     this.cursorPosition = index * this.stepSize;
     console.log(this.cursorPosition / this.stepSize);
+  }
+
+  zoomIn() {
+    if (this.zoom <= 5) {
+      this.zoom++;
+      const previousCursorPosition = this.cursorPosition / this.stepSize;
+      this.stepSize *= this.zoomFactor;
+      this.cursorPosition = previousCursorPosition * this.stepSize;
+    }
+  }
+
+  zoomOut() {
+    if (this.zoom >= -5) {
+      this.zoom--;
+      const previousCursorPosition = this.cursorPosition / this.stepSize;
+      this.stepSize /= this.zoomFactor;
+      this.cursorPosition = previousCursorPosition * this.stepSize;
+    }
   }
 
   constructor(
@@ -66,7 +86,10 @@ export class TimelineComponent implements OnDestroy {
     this.isPlaying = !this.isPlaying;
 
     if (this.isPlaying) {
-      this.videoService.playPreview(this.scenesTimeline, 0);
+      this.videoService.playPreview(
+        this.scenesTimeline,
+        this.cursorPosition / this.stepSize
+      );
       this.startCursorMovement();
     } else {
       this.videoService.pausePreview();
