@@ -46,3 +46,25 @@ a {
 a:hover {
   color: $red;
 }
+
+@media screen and (max-width: 768px) {
+  .header {
+    padding-left: 12px;
+    padding-right: 12px;
+    height: 72px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .export {
+    width: 96px;
+    height: 48px;
+    background-color: $light-main;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    pointer-events: none;
+  }
+}

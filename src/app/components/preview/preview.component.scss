@@ -2,6 +2,8 @@
 
 video {
   background-color: $dark-main;
+  width: 960px;
+  height: 540px;
 }
 
 .preview {
@@ -13,4 +15,17 @@ video {
   border-radius: 6px;
   width: 960px;
   height: 540px;
+}
+
+@media screen and (max-width: 768px) {
+  video {
+    background-color: $dark-main;
+    width: 480px;
+    height: 272px;
+  }
+
+  .preview {
+    width: 480px;
+    height: 272px;
+  }
 }

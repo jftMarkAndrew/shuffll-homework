@@ -21,5 +21,7 @@ p {
   .flex {
     flex-direction: column-reverse;
     align-items: stretch;
+    margin: 12px;
+    gap: 12px;
   }
 }
