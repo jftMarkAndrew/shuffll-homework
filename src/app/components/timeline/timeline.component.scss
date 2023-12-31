@@ -1,3 +1,5 @@
+@import "../../../../src/variables";
+
 .timeline {
   position: relative;
   margin: 24px 18px 0;
@@ -8,8 +10,8 @@
   align-items: center;
   padding: 0 6px;
   height: 36px;
-  color: #e0e0e0;
-  background-color: #161616;
+  color: $light-main;
+  background-color: $dark-main;
   border-radius: 6px;
 }
 
@@ -36,8 +38,9 @@
   height: 15px;
   border-radius: 50%;
   background-color: none;
-  border: 3px #f24822 solid;
+  border: 3px $red solid;
   z-index: 1;
+  transition: color 0.3s ease;
 }
 
 .timeline-cursor-line {
@@ -46,21 +49,22 @@
   width: 3px;
   height: 96px;
   border-radius: 1.5px;
-  background-color: #f24822;
+  background-color: $red;
   z-index: 1;
+  transition: color 0.3s ease;
 }
 
 .timeline-bottom {
   height: 96px;
-  background-color: #ffcd29;
+  background-color: $yellow;
   border-radius: 6px;
 }
 
 .timeline-content {
   margin: 12px;
   height: 72px;
-  color: #161616;
-  background-color: #16161610;
+  color: $dark-main;
+  background-color: $dark-main-ten;
 }
 
 .timeline-content-horizontal {
@@ -89,8 +93,8 @@
   justify-content: center;
   width: 42px;
   height: 42px;
-  color: #161616;
-  background-color: white;
+  color: $dark-main;
+  background-color: $white;
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -101,11 +105,11 @@
 }
 
 .zoom:hover {
-  background-color: #ffcd2950;
+  background-color: $yellow-fifty;
 }
 
 .zoom:active {
-  background-color: #ffcd29;
+  background-color: $yellow;
 }
 
 .play {
@@ -114,8 +118,8 @@
   justify-content: space-around;
   width: 120px;
   height: 48px;
-  color: #e0e0e0;
-  background-color: #161616;
+  color: $light-main;
+  background-color: $dark-main;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -127,11 +131,11 @@
 }
 
 .play:hover {
-  background-color: black;
+  background-color: $black;
 }
 
 .play:active {
-  background-color: #333333;
+  background-color: $dark-secondary;
 }
 
 .play-text {
@@ -145,8 +149,8 @@
   align-items: center;
   justify-content: space-between;
   height: 66px;
-  color: #161616;
-  background-color: #e0e0e0;
+  color: $dark-main;
+  background-color: $light-main;
   border-radius: 6px;
   cursor: pointer;
 
@@ -157,11 +161,11 @@
 }
 
 .scene:hover {
-  background-color: #d0d0d0;
+  background-color: $light-secondary;
 }
 
 .scene-placeholder {
-  background: #d0d0d0;
+  background: $light-secondary;
   min-height: 66px;
   border-radius: 6px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);

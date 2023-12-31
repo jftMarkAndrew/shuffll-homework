@@ -1,3 +1,5 @@
+@import "../../../../src/variables";
+
 .header {
   display: flex;
   align-items: center;
@@ -5,8 +7,8 @@
   padding-left: 36px;
   padding-right: 36px;
   height: 72px;
-  color: #e0e0e0;
-  background-color: #161616;
+  color: $light-main;
+  background-color: $dark-main;
   border-radius: 6px;
 }
 
@@ -20,7 +22,7 @@ h1 {
 .export {
   width: 120px;
   height: 48px;
-  background-color: #e0e0e0;
+  background-color: $light-main;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -28,19 +30,19 @@ h1 {
 }
 
 .export:hover {
-  background-color: #ffffff;
+  background-color: $white;
 }
 
 .export:active {
-  background-color: #c0c0c0;
+  background-color: $light-secondary;
 }
 
 a {
-  color: #ffcd29;
+  color: $yellow;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #f24822;
+  color: $red;
 }

@@ -7,17 +7,20 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class VideoService {
   constructor() {}
-  private scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
+  scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
   scenesTimeline$: Observable<Scene[]> =
     this.scenesTimelineSubject.asObservable();
-  private videoPlayer: HTMLVideoElement | null = null;
-  private currentScene: Scene | null = null;
+  videoPlayer: HTMLVideoElement | null = null;
+  currentScene: Scene | null = null;
+  isPreviewPlaying: boolean = false;
 
   setVideoPlayer(videoPlayer: HTMLVideoElement | null) {
     this.videoPlayer = videoPlayer;
   }
 
   playScene(scene: Scene) {
+    this.pausePreview();
+
     if (
       this.videoPlayer &&
       this.videoPlayer.paused &&
@@ -50,10 +53,10 @@ export class VideoService {
     return this.currentScene === scene && !this.videoPlayer!.paused;
   }
 
-  continuePlaying: boolean = true;
-
   async playPreview(scenesTimeline: Scene[], startTime?: number) {
     console.log('Starting playing videos in this order:', scenesTimeline);
+    this.pauseScene();
+    this.isPreviewPlaying = true;
 
     let currentIndex = 0;
     let accumulatedTime = 0;
@@ -67,7 +70,7 @@ export class VideoService {
     }
 
     const playNextVideo = async () => {
-      if (currentIndex < scenesTimeline.length && this.continuePlaying) {
+      if (currentIndex < scenesTimeline.length && this.isPreviewPlaying) {
         const scene = scenesTimeline[currentIndex];
         console.log(`Playing video ${scene.url}`);
 
@@ -86,15 +89,13 @@ export class VideoService {
           currentIndex++;
 
           if (currentIndex < scenesTimeline.length) {
-            await this.delay(scene.duration * 1000);
+            const remainingTime =
+              scene.duration -
+              (startTime ? Math.max(0, startTime - accumulatedTime) : 0);
+            await this.delay(remainingTime * 1000);
             accumulatedTime += scene.duration;
             await playNextVideo();
           } else {
-            await this.delay(
-              scene.duration * 1000 -
-                (startTime ? Math.max(0, startTime - accumulatedTime) : 0) *
-                  1000
-            );
             this.pausePreview();
           }
         }
@@ -106,12 +107,12 @@ export class VideoService {
     await playNextVideo();
   }
 
-  private delay(ms: number) {
+  delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   pausePreview() {
-    this.continuePlaying = false;
+    this.isPreviewPlaying = false;
     if (this.videoPlayer && !this.videoPlayer.paused) {
       this.videoPlayer.pause();
       console.log('Pausing preview');

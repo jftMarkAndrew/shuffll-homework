@@ -33,7 +33,7 @@ export class TimelineComponent implements OnDestroy {
   zoomFactor: number = 1.25;
   zoom: number = 0;
   isNull = true;
-  private subscription?: Subscription;
+  subscription?: Subscription;
 
   ngOnDestroy(): void {
     if (this.subscription) {
@@ -43,6 +43,24 @@ export class TimelineComponent implements OnDestroy {
 
   getSteps(number: number): number[] {
     return Array.from({ length: 3840 / number }, (_, i) => i);
+  }
+
+  onDropScene(event: CdkDragDrop<Scene[]>) {
+    this.isPlaying = false;
+    this.dndService.drop(event);
+    this.setArrayDuration(this.scenesTimeline);
+  }
+
+  onDeleteScene(scene: Scene): void {
+    this.isPlaying = false;
+    const index = this.scenesTimeline.indexOf(scene);
+    if (index !== -1) {
+      this.scenesTimeline.splice(index, 1);
+      this.setArrayDuration(this.scenesTimeline);
+    }
+    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
+      this.cursorPosition = this.stepSize * this.arrayDuration;
+    }
   }
 
   zoomIn() {
@@ -107,24 +125,6 @@ export class TimelineComponent implements OnDestroy {
     } else {
       this.videoService.pausePreview();
       this.stopCursorMovement();
-    }
-  }
-
-  onDropScene(event: CdkDragDrop<Scene[]>) {
-    this.isPlaying = false;
-    this.dndService.drop(event);
-    this.setArrayDuration(this.scenesTimeline);
-  }
-
-  onDeleteScene(scene: Scene): void {
-    this.isPlaying = false;
-    const index = this.scenesTimeline.indexOf(scene);
-    if (index !== -1) {
-      this.scenesTimeline.splice(index, 1);
-      this.setArrayDuration(this.scenesTimeline);
-    }
-    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
-      this.cursorPosition = this.stepSize * this.arrayDuration;
     }
   }
 }
