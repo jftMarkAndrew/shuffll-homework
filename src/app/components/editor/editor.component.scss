@@ -16,3 +16,10 @@ p {
   font-weight: 500;
   line-height: 18px;
 }
+
+@media screen and (max-width: 768px) {
+  .flex {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+}
