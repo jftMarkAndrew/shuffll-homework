@@ -8,6 +8,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { DndService, Scene } from '../../services/dnd.service';
 import { VideoService } from '../../services/video.service';
+import mockScenes from '../../../assets/data/mockScenes.json';
 
 @Component({
   selector: 'app-scene',
@@ -22,23 +23,7 @@ export class SceneComponent {
     public videoService: VideoService
   ) {}
 
-  mockScenes: Scene[] = [
-    {
-      title: 'The Very 1st Scene.',
-      duration: 4,
-      url: 'assets/video/mockVideo1.mp4',
-    },
-    {
-      title: 'This is a Boring 2nd Scene...',
-      duration: 5,
-      url: 'assets/video/mockVideo2.mp4',
-    },
-    {
-      title: 'Finally the Awesome 3rd Scene!',
-      duration: 3,
-      url: 'assets/video/mockVideo3.mp4',
-    },
-  ];
+  mockScenes: Scene[] = mockScenes;
 
   togglePlay(scene: Scene): void {
     if (!this.videoService.isScenePlaying(scene)) {
