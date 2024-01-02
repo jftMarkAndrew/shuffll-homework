@@ -17,6 +17,48 @@ video {
   height: 540px;
 }
 
+.no-preview {
+  position: absolute;
+  color: $white;
+  transform: scale(5);
+}
+
+@media screen and (max-width: 1600px) {
+  video {
+    width: 800px;
+    height: 450px;
+  }
+
+  .preview {
+    width: 800px;
+    height: 450px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  video {
+    width: 640px;
+    height: 360px;
+  }
+
+  .preview {
+    width: 640px;
+    height: 360px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  video {
+    width: 512px;
+    height: 320px;
+  }
+
+  .preview {
+    width: 512px;
+    height: 320px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   video {
     background-color: $dark-main;

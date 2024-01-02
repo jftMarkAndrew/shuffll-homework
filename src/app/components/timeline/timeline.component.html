@@ -13,54 +13,78 @@
   </button>
 </div>
 <div class="play-button"></div>
-<div class="timeline">
-  <div class="timeline-cursor-top" [style.left.px]="4 + cursorPosition"></div>
-  <div class="timeline-cursor-line" [style.left.px]="12 + cursorPosition"></div>
-  <div class="timeline-top">
-    <ng-container *ngFor="let i of getSteps(stepSize); let index = index">
-      <p
-        *ngIf="zoom >= -3 || index % 5 === 0"
-        class="timeline-legend"
-        [style.left.px]="14 + index * stepSize"
-        [style.padding-right.px]="stepSize / 3"
-        [style.padding-left.px]="stepSize / 3"
-        (click)="setCursorPosition(index)"
-      >
-        {{ i }}
-      </p>
-    </ng-container>
+<div class="timeline-grid">
+  <div class="no-scene-placeholder" *ngIf="scenesTimeline.length === 0">
+    <p>Drop a Scene & Start Editing!</p>
   </div>
-  <div class="timeline-bottom">
-    <div class="timeline-content">
-      <div
-        cdkDropList
-        cdkDropListOrientation="horizontal"
-        class="timeline-content-horizontal"
-        [cdkDropListData]="scenesTimeline"
-        (cdkDropListDropped)="onDropScene($event)"
-        id="timeline"
-      >
-        <div class="no-scene-placeholder" *ngIf="scenesTimeline.length === 0">
-          <p>Drop a Scene & Start Editing!</p>
-        </div>
-        <div
-          class="scene"
-          [style.width.px]="stepSize * scene.duration - 3"
-          *ngFor="let scene of scenesTimeline"
-          cdkDrag
+  <div class="timeline-top-bg"></div>
+  <div class="timeline-content-bg"></div>
+  <div class="timeline-border-left">
+    <div class="timeline-border-left-bottom"></div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-cursor-top" [style.left.px]="4 + cursorPosition"></div>
+    <div
+      class="timeline-cursor-line"
+      [style.left.px]="12 + cursorPosition"
+    ></div>
+    <div class="timeline-top">
+      <ng-container *ngFor="let i of getSteps(stepSize); let index = index">
+        <p
+          *ngIf="zoom >= -3 || index % 5 === 0"
+          class="timeline-legend"
+          [style.left.px]="14 + index * stepSize"
+          [style.padding-right.px]="stepSize / 3"
+          [style.padding-left.px]="stepSize / 3"
+          (click)="setCursorPosition(index)"
         >
-          <div>
-            <div
-              class="scene-placeholder"
-              [style.min-width.px]="stepSize * scene.duration - 3"
-              *cdkDragPlaceholder
-            ></div>
-            <p class="text-title">{{ scene.title }}</p>
-            <p class="text-duration">Duration: {{ scene.duration }}s</p>
+          {{ i }}
+        </p>
+        <p
+          *ngIf="zoom < -3 && index % 5 !== 0"
+          class="timeline-legend"
+          [style.left.px]="14 + index * stepSize"
+          [style.padding-right.px]="stepSize / 3"
+          [style.padding-left.px]="stepSize / 3"
+          (click)="setCursorPosition(index)"
+        >
+          &bull;
+        </p>
+      </ng-container>
+    </div>
+    <div class="timeline-bottom">
+      <div class="timeline-content">
+        <div
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          class="timeline-content-horizontal"
+          [style.min-width.px]="3840"
+          [cdkDropListData]="scenesTimeline"
+          (cdkDropListDropped)="onDropScene($event)"
+          id="timeline"
+        >
+          <div
+            class="scene"
+            [style.width.px]="stepSize * scene.duration - 3"
+            *ngFor="let scene of scenesTimeline"
+            cdkDrag
+          >
+            <div>
+              <div
+                class="scene-placeholder"
+                [style.min-width.px]="stepSize * scene.duration - 3"
+                *cdkDragPlaceholder
+              ></div>
+              <p class="text-title">{{ scene.title }}</p>
+              <p class="text-duration">Duration: {{ scene.duration }}s</p>
+            </div>
+            <mat-icon (click)="onDeleteScene(scene)">delete</mat-icon>
           </div>
-          <mat-icon (click)="onDeleteScene(scene)">delete</mat-icon>
         </div>
       </div>
     </div>
+  </div>
+  <div class="timeline-border-right">
+    <div class="timeline-border-right-bottom"></div>
   </div>
 </div>

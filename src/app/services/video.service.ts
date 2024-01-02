@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ChangeDetectorRef, Injectable } from '@angular/core';
 import { Scene } from './dnd.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class VideoService {
   constructor() {}
+
   scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
   scenesTimeline$: Observable<Scene[]> =
     this.scenesTimelineSubject.asObservable();

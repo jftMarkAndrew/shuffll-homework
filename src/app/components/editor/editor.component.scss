@@ -1,14 +1,13 @@
 @import "../../../../src/assets/styles/variables";
 
-.flex {
-  display: flex;
-  justify-content: space-between;
+.grid {
+  display: grid;
+  grid-template-columns: auto 960px;
   margin: 24px;
-  gap: 24px;
 }
 
-.flex-grow {
-  flex-grow: 1;
+.grid-gap {
+  margin-right: 24px;
 }
 
 p {
@@ -17,11 +16,40 @@ p {
   line-height: 18px;
 }
 
+@media screen and (max-width: 1600px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto 800px;
+    margin: 24px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto 640px;
+    margin: 24px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto 512px;
+    margin: 24px;
+  }
+}
+
 @media screen and (max-width: 768px) {
-  .flex {
+  .grid {
+    display: flex;
     flex-direction: column-reverse;
     align-items: stretch;
     margin: 12px;
     gap: 12px;
+  }
+
+  .grid-gap {
+    margin-right: 0;
   }
 }

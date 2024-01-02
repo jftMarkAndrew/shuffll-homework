@@ -5,15 +5,18 @@ import { VideoService } from '../../services/video.service';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription, interval } from 'rxjs';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [CommonModule, DragDropModule, MatIconModule],
+  imports: [CommonModule, DragDropModule, MatIconModule, ScrollingModule],
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.scss'],
 })
 export class TimelineComponent implements OnDestroy {
+  items = Array.from({ length: 100000 }).map((_, i) => `Item #${i}`);
+
   constructor(
     private dndService: DndService,
     private videoService: VideoService
