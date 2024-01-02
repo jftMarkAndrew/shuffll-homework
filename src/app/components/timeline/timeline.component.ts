@@ -110,6 +110,15 @@ export class TimelineComponent implements OnDestroy {
     if (this.cursorPosition / this.stepSize > this.arrayDuration) {
       this.cursorPosition = this.stepSize * this.arrayDuration;
     }
+    if (this.isPlaying) {
+      this.videoService.pausePreview();
+      this.stopCursorMovement();
+      this.videoService.playPreview(
+        this.scenesTimeline,
+        this.cursorPosition / this.stepSize
+      );
+      this.startCursorMovement();
+    }
     console.log(this.cursorPosition / this.stepSize);
   }
 
