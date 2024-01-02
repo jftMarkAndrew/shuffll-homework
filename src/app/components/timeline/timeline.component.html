@@ -58,7 +58,7 @@
           cdkDropList
           cdkDropListOrientation="horizontal"
           class="timeline-content-horizontal"
-          [style.min-width.px]="3840"
+          [style.min-width.px]="38400"
           [cdkDropListData]="scenesTimeline"
           (cdkDropListDropped)="onDropScene($event)"
           id="timeline"
@@ -75,8 +75,10 @@
                 [style.min-width.px]="stepSize * scene.duration - 3"
                 *cdkDragPlaceholder
               ></div>
-              <p class="text-title">{{ scene.title }}</p>
-              <p class="text-duration">Duration: {{ scene.duration }}s</p>
+              <p class="text-title">
+                {{ scene.title | truncate : (stepSize * scene.duration) / 16 }}
+              </p>
+              <p class="text-duration">{{ scene.duration }}s</p>
             </div>
             <mat-icon (click)="onDeleteScene(scene)">delete</mat-icon>
           </div>

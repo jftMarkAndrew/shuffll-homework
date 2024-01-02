@@ -284,4 +284,12 @@
   .timeline-grid {
     margin: 12px 0 0 0;
   }
+
+  .timeline-top-bg {
+    width: 100vw;
+  }
+
+  .timeline-content-bg {
+    width: calc(100vw - 24px);
+  }
 }
