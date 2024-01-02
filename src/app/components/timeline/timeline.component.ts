@@ -122,17 +122,19 @@ export class TimelineComponent implements OnDestroy {
   }
 
   togglePlay() {
-    this.isPlaying = !this.isPlaying;
+    if (!(this.arrayDuration === 0)) {
+      this.isPlaying = !this.isPlaying;
 
-    if (this.isPlaying) {
-      this.videoService.playPreview(
-        this.scenesTimeline,
-        this.cursorPosition / this.stepSize
-      );
-      this.startCursorMovement();
-    } else {
-      this.videoService.pausePreview();
-      this.stopCursorMovement();
+      if (this.isPlaying) {
+        this.videoService.playPreview(
+          this.scenesTimeline,
+          this.cursorPosition / this.stepSize
+        );
+        this.startCursorMovement();
+      } else {
+        this.videoService.pausePreview();
+        this.stopCursorMovement();
+      }
     }
   }
 }
