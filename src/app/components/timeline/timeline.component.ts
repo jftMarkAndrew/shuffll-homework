@@ -54,7 +54,6 @@ export class TimelineComponent implements OnDestroy {
   }
 
   onDropScene(event: CdkDragDrop<Scene[]>) {
-    this.isPlaying = false;
     this.dndService.drop(event);
     this.setArrayDuration(this.scenesTimeline);
   }
