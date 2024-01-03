@@ -26,7 +26,7 @@ export class SceneComponent {
   mockScenes: Scene[] = mockScenes;
 
   togglePlay(scene: Scene): void {
-    if (!this.videoService.isScenePlaying(scene)) {
+    if (!this.videoService.getIsScenePlaying(scene)) {
       this.videoService.playScene(scene);
     } else {
       this.videoService.pauseScene();

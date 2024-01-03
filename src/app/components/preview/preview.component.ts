@@ -25,7 +25,7 @@ export class PreviewComponent implements AfterViewInit {
     this.videoService.setVideoPlayer(this.videoPlayer.nativeElement);
   }
 
-  togglePlay(): void {
+  /* togglePlay(): void {
     this.isPlaying = !this.isPlaying;
 
     if (!this.isPlaying) {
@@ -42,5 +42,5 @@ export class PreviewComponent implements AfterViewInit {
     this.isPlaying = false;
     this.videoPlayer.nativeElement.pause();
     this.videoPlayer.nativeElement.src = '';
-  }
+  } */
 }

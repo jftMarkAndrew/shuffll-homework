@@ -17,7 +17,7 @@
       <p class="text-duration">Duration: {{ scene.duration }}s</p>
     </div>
     <mat-icon (click)="togglePlay(scene)">{{
-      videoService.isScenePlaying(scene) ? "pause" : "play_arrow"
+      videoService.getIsScenePlaying(scene) ? "pause" : "play_arrow"
     }}</mat-icon>
   </div>
 </div>

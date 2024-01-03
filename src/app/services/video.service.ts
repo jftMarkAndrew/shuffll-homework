@@ -8,22 +8,35 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class VideoService {
   constructor() {}
 
+  currentScene: Scene | null = null;
+
+  videoPlayer: HTMLVideoElement | null = null;
   scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
   scenesTimeline$: Observable<Scene[]> =
     this.scenesTimelineSubject.asObservable();
-  videoPlayer: HTMLVideoElement | null = null;
-  currentScene: Scene | null = null;
+
+  isScenePlaying: boolean = false;
   isPreviewPlaying: boolean = false;
+
+  getIsScenePlaying(scene: Scene): boolean {
+    if (this.isPreviewPlaying) return false;
+    return this.currentScene === scene && !this.videoPlayer!.paused;
+  }
+
+  /* getIsPreviewPlaying(scene: Scene): boolean {
+    if (this.isScenePlaying) return false;
+  } */
 
   setVideoPlayer(videoPlayer: HTMLVideoElement | null) {
     this.videoPlayer = videoPlayer;
   }
 
   playScene(scene: Scene) {
-    this.isPreviewPlaying = false;
     if (this.videoPlayer) {
       this.videoPlayer.pause();
     }
+
+    this.isPreviewPlaying = false;
 
     if (
       this.videoPlayer &&
@@ -51,11 +64,6 @@ export class VideoService {
       this.videoPlayer.pause();
       console.log(`Paused scene: ${this.currentScene.title}`);
     }
-  }
-
-  isScenePlaying(scene: Scene): boolean {
-    if (this.isPreviewPlaying) return false;
-    return this.currentScene === scene && !this.videoPlayer!.paused;
   }
 
   async playPreview(scenesTimeline: Scene[], startTime?: number) {
