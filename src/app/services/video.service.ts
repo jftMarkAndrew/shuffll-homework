@@ -8,16 +8,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class VideoService {
   constructor() {}
 
+  videoPlayer: HTMLVideoElement | null = null;
+
   showPicture: boolean = true;
   currentScene: Scene | null = null;
 
-  videoPlayer: HTMLVideoElement | null = null;
   scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
   scenesTimeline$: Observable<Scene[]> =
     this.scenesTimelineSubject.asObservable();
+
   isScenePlayingSubject = new BehaviorSubject<boolean>(false);
   isScenePlaying$: Observable<boolean> =
     this.isScenePlayingSubject.asObservable();
+
   isPreviewPlayingSubject = new BehaviorSubject<boolean>(false);
   isPreviewPlaying$: Observable<boolean> =
     this.isPreviewPlayingSubject.asObservable();

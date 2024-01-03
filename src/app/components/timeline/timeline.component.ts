@@ -91,6 +91,7 @@ export class TimelineComponent implements OnDestroy {
     this.subscription = interval(100).subscribe(() => {
       if (this.cursorPosition / this.stepSize >= this.arrayDuration) {
         this.stopCursorMovement();
+        this.togglePlay();
       } else {
         this.cursorPosition += this.stepSize / 10;
       }

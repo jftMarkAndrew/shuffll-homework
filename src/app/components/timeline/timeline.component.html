@@ -10,7 +10,11 @@
   <button
     class="play"
     (click)="togglePlay()"
-    [ngClass]="cursorPosition / stepSize >= arrayDuration ? 'disabled' : ''"
+    [ngClass]="
+      cursorPosition === 0 && cursorPosition / stepSize >= arrayDuration
+        ? 'disabled'
+        : ''
+    "
   >
     <p class="play-text">{{ isPlaying ? "Pause" : "Play" }}</p>
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
