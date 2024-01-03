@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Scene } from './dnd.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -44,7 +44,6 @@ export class VideoService {
       this.currentScene?.url === scene.url
     ) {
       this.videoPlayer.play();
-      console.log('Resuming preview');
     } else if (this.videoPlayer) {
       this.videoPlayer.src = scene.url;
       this.videoPlayer.load();
@@ -62,12 +61,10 @@ export class VideoService {
   pauseScene() {
     if (this.videoPlayer && this.currentScene) {
       this.videoPlayer.pause();
-      console.log(`Paused scene: ${this.currentScene.title}`);
     }
   }
 
   async playPreview(scenesTimeline: Scene[], startTime?: number) {
-    console.log('Starting playing videos in this order:', scenesTimeline);
     this.pauseScene();
     this.isPreviewPlaying = true;
 
@@ -85,7 +82,6 @@ export class VideoService {
     const playNextVideo = async () => {
       if (currentIndex < scenesTimeline.length && this.isPreviewPlaying) {
         const scene = scenesTimeline[currentIndex];
-        console.log(`Playing video ${scene.url}`);
 
         if (this.videoPlayer) {
           this.videoPlayer.setAttribute('src', scene.url);
@@ -126,7 +122,6 @@ export class VideoService {
     this.isPreviewPlaying = false;
     if (this.videoPlayer && !this.videoPlayer.paused) {
       this.videoPlayer.pause();
-      console.log('Pausing preview');
     }
   }
 }

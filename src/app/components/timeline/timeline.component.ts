@@ -118,7 +118,6 @@ export class TimelineComponent implements OnDestroy {
       );
       this.startCursorMovement();
     }
-    console.log(this.cursorPosition / this.stepSize);
   }
 
   setArrayDuration(array: Scene[]) {

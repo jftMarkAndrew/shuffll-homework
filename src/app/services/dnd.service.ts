@@ -31,7 +31,6 @@ export class DndService {
         event.previousIndex,
         event.currentIndex
       );
-      console.log('Timeline Container Data:', event.container.data);
       this.scenesTimelineSubject.next(event.container.data);
     } else {
       moveItemInArray(
@@ -40,7 +39,6 @@ export class DndService {
         event.currentIndex
       );
       if (event.container.id === 'timeline') {
-        console.log('Timeline Container Data:', event.container.data);
         this.scenesTimelineSubject.next(event.container.data);
       }
     }
