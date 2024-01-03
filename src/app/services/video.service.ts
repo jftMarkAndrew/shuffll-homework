@@ -14,6 +14,12 @@ export class VideoService {
   scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
   scenesTimeline$: Observable<Scene[]> =
     this.scenesTimelineSubject.asObservable();
+  isScenePlayingSubject = new BehaviorSubject<boolean>(false);
+  isScenePlaying$: Observable<boolean> =
+    this.isScenePlayingSubject.asObservable();
+  isPreviewPlayingSubject = new BehaviorSubject<boolean>(false);
+  isPreviewPlaying$: Observable<boolean> =
+    this.isPreviewPlayingSubject.asObservable();
 
   isScenePlaying: boolean = false;
   isPreviewPlaying: boolean = false;
@@ -33,6 +39,8 @@ export class VideoService {
   }
 
   playScene(scene: Scene) {
+    this.isScenePlayingSubject.next(true);
+
     if (this.videoPlayer) {
       this.videoPlayer.pause();
     }
@@ -67,6 +75,7 @@ export class VideoService {
 
   async playPreview(scenesTimeline: Scene[], startTime?: number) {
     this.pauseScene();
+    this.isPreviewPlayingSubject.next(true);
     this.isPreviewPlaying = true;
 
     let currentIndex = 0;
