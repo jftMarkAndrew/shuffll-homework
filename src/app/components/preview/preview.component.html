@@ -1,10 +1,5 @@
 <div class="preview">
-  <mat-icon
-    class="no-preview"
-    *ngIf="
-      !(videoService.isScenePlaying$ | async) &&
-      !(videoService.isPreviewPlaying$ | async)
-    "
+  <mat-icon class="no-preview" *ngIf="videoService.showPicture"
     >image_search</mat-icon
   >
   <video #videoPlayer preload="auto">

@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class VideoService {
   constructor() {}
 
+  showPicture: boolean = true;
   currentScene: Scene | null = null;
 
   videoPlayer: HTMLVideoElement | null = null;
@@ -39,7 +40,7 @@ export class VideoService {
   }
 
   playScene(scene: Scene) {
-    this.isScenePlayingSubject.next(true);
+    this.showPicture = false;
 
     if (this.videoPlayer) {
       this.videoPlayer.pause();
@@ -74,8 +75,8 @@ export class VideoService {
   }
 
   async playPreview(scenesTimeline: Scene[], startTime?: number) {
+    this.showPicture = false;
     this.pauseScene();
-    this.isPreviewPlayingSubject.next(true);
     this.isPreviewPlaying = true;
 
     let currentIndex = 0;
