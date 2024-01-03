@@ -7,7 +7,11 @@
       <mat-icon (click)="zoomOut()">zoom_out</mat-icon>
     </button>
   </div>
-  <button class="play" (click)="togglePlay()" [disabled]="false">
+  <button
+    class="play"
+    (click)="togglePlay()"
+    [ngClass]="cursorPosition / stepSize >= arrayDuration ? 'disabled' : ''"
+  >
     <p class="play-text">{{ isPlaying ? "Pause" : "Play" }}</p>
     <mat-icon>{{ isPlaying ? "pause" : "play_arrow" }}</mat-icon>
   </button>

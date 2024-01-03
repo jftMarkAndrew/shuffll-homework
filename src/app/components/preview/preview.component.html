@@ -1,9 +1,9 @@
 <div class="preview">
-  <!-- <mat-icon class="no-preview" *ngIf="!currentVideo?.url"
+  <mat-icon class="no-preview" *ngIf="!videoService.currentScene?.url"
     >image_search</mat-icon
-  > -->
+  >
   <video #videoPlayer preload="auto">
-    <source [src]="currentVideo?.url" type="video/mp4" />
+    <source type="video/mp4" />
     Your browser does not support the video.
   </video>
 </div>

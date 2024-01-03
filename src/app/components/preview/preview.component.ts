@@ -15,32 +15,11 @@ import { Observable } from 'rxjs';
 export class PreviewComponent implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef;
 
-  isPlaying = false;
   scenesTimeline$: Observable<Scene[]> = this.videoService.scenesTimeline$;
-  currentVideo: Scene | null = null;
 
-  constructor(private videoService: VideoService) {}
+  constructor(public videoService: VideoService) {}
 
   ngAfterViewInit() {
     this.videoService.setVideoPlayer(this.videoPlayer.nativeElement);
   }
-
-  /* togglePlay(): void {
-    this.isPlaying = !this.isPlaying;
-
-    if (!this.isPlaying) {
-      this.scenesTimeline$.subscribe((scenesTimeline) => {
-        this.videoService.playPreview(scenesTimeline);
-      });
-    } else {
-      this.pausePreview();
-    }
-  }
-
-  pausePreview(): void {
-    this.currentVideo = null;
-    this.isPlaying = false;
-    this.videoPlayer.nativeElement.pause();
-    this.videoPlayer.nativeElement.src = '';
-  } */
 }

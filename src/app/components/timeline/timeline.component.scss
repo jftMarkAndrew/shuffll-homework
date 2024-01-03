@@ -193,6 +193,12 @@
   }
 }
 
+.disabled {
+  pointer-events: none;
+  color: $dark-main-fifty;
+  background-color: $light-main;
+}
+
 .play:hover {
   background-color: $black;
 }

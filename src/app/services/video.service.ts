@@ -23,9 +23,10 @@ export class VideoService {
     return this.currentScene === scene && !this.videoPlayer!.paused;
   }
 
-  /* getIsPreviewPlaying(scene: Scene): boolean {
+  getIsPreviewPlaying(): boolean {
     if (this.isScenePlaying) return false;
-  } */
+    return true;
+  }
 
   setVideoPlayer(videoPlayer: HTMLVideoElement | null) {
     this.videoPlayer = videoPlayer;
