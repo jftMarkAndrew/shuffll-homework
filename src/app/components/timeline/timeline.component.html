@@ -23,17 +23,17 @@
     <div class="timeline-border-left-bottom"></div>
   </div>
   <div class="timeline">
-    <div class="timeline-cursor-top" [style.left.px]="4 + cursorPosition"></div>
+    <div class="timeline-cursor-top" [style.left.px]="cursorPosition"></div>
     <div
       class="timeline-cursor-line"
-      [style.left.px]="12 + cursorPosition"
+      [style.left.px]="8 + cursorPosition"
     ></div>
     <div class="timeline-top">
       <ng-container *ngFor="let i of getSteps(stepSize); let index = index">
         <p
           *ngIf="zoom >= -3 || index % 5 === 0"
           class="timeline-legend"
-          [style.left.px]="14 + index * stepSize"
+          [style.left.px]="10 + index * stepSize"
           [style.padding-right.px]="stepSize / 3"
           [style.padding-left.px]="stepSize / 3"
           (click)="setCursorPosition(index)"
@@ -43,7 +43,7 @@
         <p
           *ngIf="zoom < -3 && index % 5 !== 0"
           class="timeline-legend"
-          [style.left.px]="14 + index * stepSize"
+          [style.left.px]="10 + index * stepSize"
           [style.padding-right.px]="stepSize / 3"
           [style.padding-left.px]="stepSize / 3"
           (click)="setCursorPosition(index)"

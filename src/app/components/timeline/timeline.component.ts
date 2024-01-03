@@ -40,7 +40,6 @@ export class TimelineComponent implements OnDestroy {
   stepSize: number = 64;
   zoomFactor: number = 1.25;
   zoom: number = 0;
-  isNull = true;
   subscription?: Subscription;
 
   ngOnDestroy(): void {
