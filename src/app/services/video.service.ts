@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Scene } from './dnd.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,8 @@ export class VideoService {
   isPreviewPlayingSubject = new BehaviorSubject<boolean>(false);
   isPreviewPlaying$: Observable<boolean> =
     this.isPreviewPlayingSubject.asObservable();
+
+  stopCursorMovementSubject: Subject<void> = new Subject<void>();
 
   isScenePlaying: boolean = false;
   isPreviewPlaying: boolean = false;
@@ -49,6 +51,8 @@ export class VideoService {
       this.videoPlayer.pause();
     }
 
+    this.isPreviewPlayingSubject.next(false);
+    this.stopCursorMovementSubject.next();
     this.isPreviewPlaying = false;
 
     if (
@@ -86,6 +90,7 @@ export class VideoService {
       this.showPicture = false;
       this.pauseScene();
       this.isPreviewPlaying = true;
+      this.isPreviewPlayingSubject.next(true);
 
       if (this.videoPlayer) {
         let chosenIndex = 0;
@@ -126,6 +131,7 @@ export class VideoService {
 
   pausePreview() {
     this.isPreviewPlaying = false;
+    this.isPreviewPlayingSubject.next(false);
     if (this.videoPlayer && !this.videoPlayer.paused) {
       this.videoPlayer.pause();
     }

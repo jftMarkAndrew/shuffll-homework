@@ -26,10 +26,24 @@ export class TimelineComponent implements OnDestroy {
     private dndService: DndService,
     private videoService: VideoService
   ) {
-    this.subscription = this.videoService.scenesTimeline$.subscribe(
-      (scenes) => {
+    this.subscription = new Subscription();
+
+    this.subscription.add(
+      this.videoService.scenesTimeline$.subscribe((scenes) => {
         this.scenesTimeline = scenes;
-      }
+      })
+    );
+
+    this.subscription.add(
+      this.videoService.isPreviewPlaying$.subscribe((isPreviewPlaying) => {
+        this.isPlaying = isPreviewPlaying;
+      })
+    );
+
+    this.subscription.add(
+      this.videoService.stopCursorMovementSubject.subscribe(() => {
+        this.stopCursorMovement();
+      })
     );
   }
 
