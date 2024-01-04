@@ -82,39 +82,44 @@ export class VideoService {
     pointsOfInterest: number[],
     startTime: number
   ) {
-    this.showPicture = false;
-    this.pauseScene();
-    this.isPreviewPlaying = true;
+    if (!(startTime >= pointsOfInterest[pointsOfInterest.length - 1])) {
+      this.showPicture = false;
+      this.pauseScene();
+      this.isPreviewPlaying = true;
 
-    if (this.videoPlayer) {
-      let chosenIndex = 0;
+      if (this.videoPlayer) {
+        let chosenIndex = 0;
 
-      for (let i = 0; i < pointsOfInterest.length; i++) {
-        if (startTime < pointsOfInterest[i]) {
-          chosenIndex = i - 1;
-          break;
+        for (let i = 0; i < pointsOfInterest.length; i++) {
+          if (startTime < pointsOfInterest[i]) {
+            chosenIndex = i - 1;
+            break;
+          }
         }
-      }
 
-      if (startTime >= pointsOfInterest[pointsOfInterest.length - 1]) {
-        chosenIndex = pointsOfInterest.length - 1;
-      }
+        if (startTime >= pointsOfInterest[pointsOfInterest.length - 1]) {
+          chosenIndex = pointsOfInterest.length - 1;
+        }
 
-      const chosenStartTime = startTime - pointsOfInterest[chosenIndex];
+        const chosenStartTime = startTime - pointsOfInterest[chosenIndex];
 
-      if (this.videoPlayer && this.videoPlayer.currentTime !== undefined) {
-        this.videoPlayer.src = scenesTimeline[chosenIndex].url;
+        if (this.videoPlayer && this.videoPlayer.currentTime !== undefined) {
+          this.videoPlayer.src = scenesTimeline[chosenIndex].url;
 
-        this.videoPlayer.addEventListener('loadedmetadata', () => {
-          if (this.videoPlayer && this.videoPlayer.currentTime !== undefined) {
-            this.videoPlayer.currentTime = chosenStartTime;
-          }
-          if (this.videoPlayer) {
-            this.videoPlayer.play();
-          }
-        });
+          this.videoPlayer.addEventListener('loadedmetadata', () => {
+            if (
+              this.videoPlayer &&
+              this.videoPlayer.currentTime !== undefined
+            ) {
+              this.videoPlayer.currentTime = chosenStartTime;
+            }
+            if (this.videoPlayer) {
+              this.videoPlayer.play();
+            }
+          });
 
-        this.videoPlayer.load();
+          this.videoPlayer.load();
+        }
       }
     }
   }
