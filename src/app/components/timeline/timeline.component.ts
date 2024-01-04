@@ -1,4 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DndService, Scene } from '../../services/dnd.service';
 import { VideoService } from '../../services/video.service';
@@ -47,18 +53,42 @@ export class TimelineComponent implements OnDestroy {
     );
   }
 
-  arrayDuration: number = 0;
-  scenesTimeline: Scene[] = [];
+  subscription?: Subscription;
+
   isPlaying: boolean = false;
   cursorPosition: number = 0;
+
   stepSize: number = 64;
-  zoomFactor: number = 1.25;
   zoom: number = 0;
-  subscription?: Subscription;
+  zoomFactor: number = 1.25;
+
+  minContentWidth: number = 3840;
+  contentWidth: number = 3840;
+  lastScrollPosition: number = 0;
+
+  scenesTimeline: Scene[] = [];
   pointsOfInterest: number[] = [];
+  previewDuration: number = 0;
+
+  @ViewChild('timeline', { static: true }) timeline!: ElementRef;
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    const timelineGridElement = this.timeline.nativeElement;
+    const scrollPosition = timelineGridElement.scrollLeft;
+
+    if (
+      scrollPosition < this.lastScrollPosition &&
+      this.contentWidth >= this.minContentWidth
+    ) {
+      this.contentWidth -= this.stepSize * 1.25;
+    } else if (scrollPosition > this.lastScrollPosition) {
+      this.contentWidth += this.stepSize * 1;
+    }
+    this.lastScrollPosition = scrollPosition;
+  }
 
   getSteps(number: number): number[] {
-    return Array.from({ length: 38400 / number }, (_, i) => i);
+    return Array.from({ length: this.contentWidth / number }, (_, i) => i);
   }
 
   ngOnDestroy(): void {
@@ -68,7 +98,7 @@ export class TimelineComponent implements OnDestroy {
   }
 
   togglePlay() {
-    if (!(this.arrayDuration === 0)) {
+    if (!(this.previewDuration === 0)) {
       this.isPlaying = !this.isPlaying;
 
       if (this.isPlaying) {
@@ -122,23 +152,23 @@ export class TimelineComponent implements OnDestroy {
       this.scenesTimeline.splice(index, 1);
       this.getPointsOfInterest(this.scenesTimeline);
     }
-    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
-      this.cursorPosition = this.stepSize * this.arrayDuration;
+    if (this.cursorPosition / this.stepSize > this.previewDuration) {
+      this.cursorPosition = this.stepSize * this.previewDuration;
     }
   }
 
   getPointsOfInterest(array: Scene[]) {
-    this.arrayDuration = 0;
+    this.previewDuration = 0;
     this.pointsOfInterest = [0];
     array.forEach((scene) => {
-      this.arrayDuration += scene.duration;
-      this.pointsOfInterest.push(this.arrayDuration);
+      this.previewDuration += scene.duration;
+      this.pointsOfInterest.push(this.previewDuration);
     });
   }
 
   startCursorMovement() {
     this.subscription = interval(100).subscribe(() => {
-      if (this.cursorPosition / this.stepSize >= this.arrayDuration) {
+      if (this.cursorPosition / this.stepSize >= this.previewDuration) {
         this.stopCursorMovement();
         this.togglePlay();
       } else {
@@ -160,16 +190,8 @@ export class TimelineComponent implements OnDestroy {
 
   setCursorPosition(index: number) {
     this.cursorPosition = index * this.stepSize;
-    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
-      this.cursorPosition = this.stepSize * this.arrayDuration;
-    }
-    if (
-      parseFloat((this.cursorPosition / this.stepSize).toFixed(1)) ===
-      this.pointsOfInterest[0]
-    ) {
-      console.log(
-        `${parseFloat((this.cursorPosition / this.stepSize).toFixed(1))} sec`
-      );
+    if (this.cursorPosition / this.stepSize > this.previewDuration) {
+      this.cursorPosition = this.stepSize * this.previewDuration;
     }
     if (this.isPlaying) {
       this.videoService.pausePreview();

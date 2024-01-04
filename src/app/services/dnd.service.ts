@@ -17,6 +17,7 @@ export interface Scene {
 })
 export class DndService {
   constructor() {}
+
   scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
 
   drop(event: CdkDragDrop<Scene[]>) {

@@ -75,3 +75,16 @@ video {
     height: 272px;
   }
 }
+
+@media screen and (max-width: 430px) {
+  video {
+    background-color: $dark-main;
+    width: 406px;
+    height: 228.375px;
+  }
+
+  .preview {
+    width: 406px;
+    height: 228.375px;
+  }
+}

@@ -11,7 +11,7 @@
     class="play"
     (click)="togglePlay()"
     [ngClass]="
-      cursorPosition === 0 && cursorPosition / stepSize >= arrayDuration
+      cursorPosition === 0 && cursorPosition / stepSize >= previewDuration
         ? 'disabled'
         : ''
     "
@@ -30,7 +30,7 @@
   <div class="timeline-border-left">
     <div class="timeline-border-left-bottom"></div>
   </div>
-  <div class="timeline">
+  <div class="timeline" #timeline (scroll)="onScroll()">
     <div class="timeline-cursor-top" [style.left.px]="cursorPosition"></div>
     <div
       class="timeline-cursor-line"
@@ -66,7 +66,7 @@
           cdkDropList
           cdkDropListOrientation="horizontal"
           class="timeline-content-horizontal"
-          [style.min-width.px]="38400"
+          [style.min-width.px]="contentWidth"
           [cdkDropListData]="scenesTimeline"
           (cdkDropListDropped)="onDropScene($event)"
           id="timeline"

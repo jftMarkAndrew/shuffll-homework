@@ -9,17 +9,14 @@ export class VideoService {
   constructor() {}
 
   videoPlayer: HTMLVideoElement | null = null;
-
   showPicture: boolean = true;
   currentScene: Scene | null = null;
+  isScenePlaying: boolean = false;
+  isPreviewPlaying: boolean = false;
 
   scenesTimelineSubject = new BehaviorSubject<Scene[]>([]);
   scenesTimeline$: Observable<Scene[]> =
     this.scenesTimelineSubject.asObservable();
-
-  isScenePlayingSubject = new BehaviorSubject<boolean>(false);
-  isScenePlaying$: Observable<boolean> =
-    this.isScenePlayingSubject.asObservable();
 
   isPreviewPlayingSubject = new BehaviorSubject<boolean>(false);
   isPreviewPlaying$: Observable<boolean> =
@@ -27,17 +24,9 @@ export class VideoService {
 
   stopCursorMovementSubject: Subject<void> = new Subject<void>();
 
-  isScenePlaying: boolean = false;
-  isPreviewPlaying: boolean = false;
-
   getIsScenePlaying(scene: Scene): boolean {
     if (this.isPreviewPlaying) return false;
     return this.currentScene === scene && !this.videoPlayer!.paused;
-  }
-
-  getIsPreviewPlaying(): boolean {
-    if (this.isScenePlaying) return false;
-    return true;
   }
 
   setVideoPlayer(videoPlayer: HTMLVideoElement | null) {
