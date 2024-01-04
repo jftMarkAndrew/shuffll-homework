@@ -92,6 +92,13 @@ export class TimelineComponent implements OnDestroy {
   onDropScene(event: CdkDragDrop<Scene[]>) {
     this.dndService.drop(event);
     this.getPointsOfInterest(this.scenesTimeline);
+    if (this.isPlaying) {
+      this.videoService.playPreview(
+        this.scenesTimeline,
+        this.pointsOfInterest,
+        parseFloat((this.cursorPosition / this.stepSize).toFixed(1))
+      );
+    }
   }
 
   onDeleteScene(scene: Scene): void {
