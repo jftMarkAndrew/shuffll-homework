@@ -41,6 +41,11 @@ export class TimelineComponent implements OnDestroy {
   zoomFactor: number = 1.25;
   zoom: number = 0;
   subscription?: Subscription;
+  pointsOfInterest: number[] = [];
+
+  getSteps(number: number): number[] {
+    return Array.from({ length: 38400 / number }, (_, i) => i);
+  }
 
   ngOnDestroy(): void {
     if (this.subscription) {
@@ -48,24 +53,21 @@ export class TimelineComponent implements OnDestroy {
     }
   }
 
-  getSteps(number: number): number[] {
-    return Array.from({ length: 38400 / number }, (_, i) => i);
-  }
+  togglePlay() {
+    if (!(this.arrayDuration === 0)) {
+      this.isPlaying = !this.isPlaying;
 
-  onDropScene(event: CdkDragDrop<Scene[]>) {
-    this.dndService.drop(event);
-    this.setArrayDuration(this.scenesTimeline);
-  }
-
-  onDeleteScene(scene: Scene): void {
-    this.isPlaying = false;
-    const index = this.scenesTimeline.indexOf(scene);
-    if (index !== -1) {
-      this.scenesTimeline.splice(index, 1);
-      this.setArrayDuration(this.scenesTimeline);
-    }
-    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
-      this.cursorPosition = this.stepSize * this.arrayDuration;
+      if (this.isPlaying) {
+        this.videoService.playPreview(
+          this.scenesTimeline,
+          this.pointsOfInterest,
+          this.cursorPosition / this.stepSize
+        );
+        this.startCursorMovement();
+      } else {
+        this.videoService.pausePreview();
+        this.stopCursorMovement();
+      }
     }
   }
 
@@ -87,6 +89,32 @@ export class TimelineComponent implements OnDestroy {
     }
   }
 
+  onDropScene(event: CdkDragDrop<Scene[]>) {
+    this.dndService.drop(event);
+    this.getPointsOfInterest(this.scenesTimeline);
+  }
+
+  onDeleteScene(scene: Scene): void {
+    this.isPlaying = false;
+    const index = this.scenesTimeline.indexOf(scene);
+    if (index !== -1) {
+      this.scenesTimeline.splice(index, 1);
+      this.getPointsOfInterest(this.scenesTimeline);
+    }
+    if (this.cursorPosition / this.stepSize > this.arrayDuration) {
+      this.cursorPosition = this.stepSize * this.arrayDuration;
+    }
+  }
+
+  getPointsOfInterest(array: Scene[]) {
+    this.arrayDuration = 0;
+    this.pointsOfInterest = [0];
+    array.forEach((scene) => {
+      this.arrayDuration += scene.duration;
+      this.pointsOfInterest.push(this.arrayDuration);
+    });
+  }
+
   startCursorMovement() {
     this.subscription = interval(100).subscribe(() => {
       if (this.cursorPosition / this.stepSize >= this.arrayDuration) {
@@ -95,13 +123,18 @@ export class TimelineComponent implements OnDestroy {
       } else {
         this.cursorPosition += this.stepSize / 10;
       }
+      if (
+        this.pointsOfInterest.includes(
+          parseFloat((this.cursorPosition / this.stepSize).toFixed(1))
+        )
+      ) {
+        this.videoService.playPreview(
+          this.scenesTimeline,
+          this.pointsOfInterest,
+          parseFloat((this.cursorPosition / this.stepSize).toFixed(1))
+        );
+      }
     });
-  }
-
-  stopCursorMovement() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   setCursorPosition(index: number) {
@@ -109,39 +142,29 @@ export class TimelineComponent implements OnDestroy {
     if (this.cursorPosition / this.stepSize > this.arrayDuration) {
       this.cursorPosition = this.stepSize * this.arrayDuration;
     }
+    if (
+      parseFloat((this.cursorPosition / this.stepSize).toFixed(1)) ===
+      this.pointsOfInterest[0]
+    ) {
+      console.log(
+        `${parseFloat((this.cursorPosition / this.stepSize).toFixed(1))} sec`
+      );
+    }
     if (this.isPlaying) {
       this.videoService.pausePreview();
       this.stopCursorMovement();
       this.videoService.playPreview(
         this.scenesTimeline,
+        this.pointsOfInterest,
         this.cursorPosition / this.stepSize
       );
       this.startCursorMovement();
     }
   }
 
-  setArrayDuration(array: Scene[]) {
-    this.arrayDuration = 0;
-
-    for (const scene of array) {
-      this.arrayDuration += scene.duration;
-    }
-  }
-
-  togglePlay() {
-    if (!(this.arrayDuration === 0)) {
-      this.isPlaying = !this.isPlaying;
-
-      if (this.isPlaying) {
-        this.videoService.playPreview(
-          this.scenesTimeline,
-          this.cursorPosition / this.stepSize
-        );
-        this.startCursorMovement();
-      } else {
-        this.videoService.pausePreview();
-        this.stopCursorMovement();
-      }
+  stopCursorMovement() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

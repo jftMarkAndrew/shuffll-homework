@@ -15,8 +15,6 @@ import { Observable } from 'rxjs';
 export class PreviewComponent implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef;
 
-  scenesTimeline$: Observable<Scene[]> = this.videoService.scenesTimeline$;
-
   constructor(public videoService: VideoService) {}
 
   ngAfterViewInit() {

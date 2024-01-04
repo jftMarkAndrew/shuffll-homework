@@ -77,59 +77,46 @@ export class VideoService {
     }
   }
 
-  async playPreview(scenesTimeline: Scene[], startTime?: number) {
+  playPreview(
+    scenesTimeline: Scene[],
+    pointsOfInterest: number[],
+    startTime: number
+  ) {
     this.showPicture = false;
     this.pauseScene();
     this.isPreviewPlaying = true;
 
-    let currentIndex = 0;
-    let accumulatedTime = 0;
+    if (this.videoPlayer) {
+      let chosenIndex = 0;
 
-    while (
-      currentIndex < scenesTimeline.length &&
-      accumulatedTime + scenesTimeline[currentIndex].duration <= startTime!
-    ) {
-      accumulatedTime += scenesTimeline[currentIndex].duration;
-      currentIndex++;
-    }
-
-    const playNextVideo = async () => {
-      if (currentIndex < scenesTimeline.length && this.isPreviewPlaying) {
-        const scene = scenesTimeline[currentIndex];
-
-        if (this.videoPlayer) {
-          this.videoPlayer.setAttribute('src', scene.url);
-          this.videoPlayer.load();
-
-          if (this.videoPlayer.currentTime !== undefined) {
-            this.videoPlayer.currentTime = startTime
-              ? Math.max(0, startTime - accumulatedTime)
-              : 0;
-          }
-
-          this.videoPlayer.play();
-
-          currentIndex++;
-
-          if (currentIndex < scenesTimeline.length) {
-            const remainingTime =
-              scene.duration -
-              (startTime ? Math.max(0, startTime - accumulatedTime) : 0);
-            await this.delay(remainingTime * 1000);
-            accumulatedTime += scene.duration;
-            await playNextVideo();
-          }
+      for (let i = 0; i < pointsOfInterest.length; i++) {
+        if (startTime < pointsOfInterest[i]) {
+          chosenIndex = i - 1;
+          break;
         }
-      } else {
-        this.pausePreview();
       }
-    };
 
-    await playNextVideo();
-  }
+      if (startTime >= pointsOfInterest[pointsOfInterest.length - 1]) {
+        chosenIndex = pointsOfInterest.length - 1;
+      }
 
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+      const chosenStartTime = startTime - pointsOfInterest[chosenIndex];
+
+      if (this.videoPlayer && this.videoPlayer.currentTime !== undefined) {
+        this.videoPlayer.src = scenesTimeline[chosenIndex].url;
+
+        this.videoPlayer.addEventListener('loadedmetadata', () => {
+          if (this.videoPlayer && this.videoPlayer.currentTime !== undefined) {
+            this.videoPlayer.currentTime = chosenStartTime;
+          }
+          if (this.videoPlayer) {
+            this.videoPlayer.play();
+          }
+        });
+
+        this.videoPlayer.load();
+      }
+    }
   }
 
   pausePreview() {
