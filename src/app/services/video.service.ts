@@ -40,9 +40,11 @@ export class VideoService {
       this.videoPlayer.pause();
     }
 
-    this.isPreviewPlayingSubject.next(false);
-    this.stopCursorMovementSubject.next();
-    this.isPreviewPlaying = false;
+    if (this.isPreviewPlaying) {
+      this.isPreviewPlayingSubject.next(false);
+      this.stopCursorMovementSubject.next();
+      this.isPreviewPlaying = false;
+    }
 
     if (
       this.videoPlayer &&
