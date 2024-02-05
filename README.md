@@ -32,7 +32,7 @@ __Additional Features__
 * When you play the video, move the cursor to the current time playing - update it’s position.
 * If the you click to move the cursor while playing the video, update its location as well as immediately jump and continue to play from that point.
 
-# A message from the developer
+# Notes
 
-* __Mark Andrew (Tel Aviv, Israel). You can contact me on <a href="https://www.linkedin.com/in/mark-andrew-jft/">LinkedIn</a> or <a href="https://www.behance.net/mark-andrew-jft">Behance</a>.__
+* __Created by Mark Andrew (Tel Aviv, Israel). You can contact me on <a href="https://www.linkedin.com/in/mark-andrew-jft/">LinkedIn</a> or <a href="https://www.behance.net/mark-andrew-jft">Behance</a>.__
 * __Have a great day!__
