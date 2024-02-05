@@ -1,27 +1,36 @@
-# Video Editor
+# for Shuffll: AI-driven Video Production Platform
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.8.
+__Objective:__ Develop a single-page video editing interface using Angular and to implement interactive features without any server-side dependencies. The main idea is to be able to chose, arrange and trim different video scenes (each is a single video file) on a track. The result as a virtual representation of a full video assembled from different scenes.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+# Description
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+__Requirements__
+* The user will see a list of possible scenes.
+* The user will be able to preview each of the scenes.
+* The user will be able to drag-drop scenes to the timeline.
+* The user will be able to use the same scene several times. 
 
-## Build
+__Assumptions__
+* The user won’t need any “space” between the scenes on the track. 
+* The user won’t need to put one scenes on top of another scene. Meaning there are no real layers, only a single track.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+__The Track__
+* There will be a ruler on top of the track, with marker on every round second (1s, 2s,...).
+* The user can re-arrange the scenes on the track.
+* Each scene’s length on the track (Its width) will be proportional to the ruler.
+* You will be able to zoom in and out (Changing the spread of the ruler itself- zoom on the X-axis only).
+* You will be able to press ‘play’ and play the track from beginning, one scene after the other.
+* When playing, change the ‘Play’ button to ‘Pause’, clicking the ‘Pause’ button will stop the preview.
 
-## Running unit tests
+__Features__
+* Create a cursor, when you click on the track, the cursor will move to the location of the click (X-axis only).
+* Play the video from where the cursor is.
+* When you play the video, move the cursor to the current time playing - update it’s position.
+* If the you click to move the cursor while playing the video, update its location as well as immediately jump and continue to play from that point.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Final note
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+* __Author - Mark Andrew (Tel Aviv, Israel). You can contact me on <a href="https://www.linkedin.com/in/mark-andrew-jft/">LinkedIn</a> or <a href="https://www.behance.net/mark-andrew-jft">Behance</a>.__
+* __Have a great day!__
